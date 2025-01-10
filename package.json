@@ -10,7 +10,8 @@
     "dev": "tsc -w",
     "test": "jest",
     "lint": "eslint src --ext .ts",
-    "format": "prettier --write src"
+    "format": "prettier --write src",
+    "run-trader": "node --loader ts-node/esm ./src/scripts/main.ts"
   },
   "author": "yadheedhya",
   "license": "MIT",
