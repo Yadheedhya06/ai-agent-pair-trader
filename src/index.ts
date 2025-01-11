@@ -9,7 +9,7 @@ import {
   stringToUuid,
   type IDatabaseAdapter,
 } from "@ai16z/eliza";
-import { loadCharacters } from "./scripts/loader.ts";
+import { loadCharacters } from "./scripts/loader";
 import { fileURLToPath } from "url";
 
 // ES Module dirname equivalent

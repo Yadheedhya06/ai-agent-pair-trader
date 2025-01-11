@@ -92,6 +92,8 @@ async function getAllCoins() {
     }
 }
 
-await getAllCoins()
-    .then(() => process.exit(0))
-    .catch(() => process.exit(1));
+(async () => {
+    await getAllCoins()
+        .then(() => process.exit(0))
+        .catch(() => process.exit(1));
+})();
