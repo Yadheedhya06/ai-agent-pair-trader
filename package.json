@@ -11,7 +11,8 @@
     "test": "jest",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src",
-    "fetch:pairs": "bun run ./public/scripts/getCoinglassPairs.ts",
+    "fetch:pairs": "bun run ./public/scripts/coinglass/getCoinglassPairs.ts",
+    "fetch:coins": "bun run ./public/scripts/coingecko/getCoins.ts",
     "run-trader": "node --loader ts-node/esm ./src/index.ts"
   },
   "author": "yadheedhya",

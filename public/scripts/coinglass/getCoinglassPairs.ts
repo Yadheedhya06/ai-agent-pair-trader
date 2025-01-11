@@ -2,7 +2,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
-import { CoinglassResponse, CoinglassResponseSchema } from '../types/coinglass';
+import { CoinglassResponse, CoinglassResponseSchema } from '../../types/coinglass';
 
 dotenv.config();
 
@@ -20,11 +20,11 @@ async function getSupportedExchangePairs() {
 
         const validatedData = CoinglassResponseSchema.parse(response.data);
         const binancePairs = validatedData.data['Binance']
-        console.log('🚀 Total number of Binance Trading Pairs are: ',binancePairs.length)
 
         const filteredPairs =binancePairs.filter(pair => !pair.instrumentId.includes('_'));
+        console.log('🚀 Total number of Binance Trading Pairs are: ',filteredPairs.length)
         
-        const filePath = path.join(__dirname, '..', 'data', 'binancePairs.ts');
+        const filePath = path.join(__dirname, '..', '..', 'data', 'binancePairs.ts');
         const fileContent = `export const binancePairs = ${JSON.stringify(filteredPairs, null, 2)};`;
         
         fs.writeFileSync(filePath, fileContent);

@@ -4,14 +4,7 @@ import {
   validateCharacterConfig,
   defaultCharacter,
 } from "@ai16z/eliza";
-import { DirectClient } from "@ai16z/client-direct";
 import fs from "fs";
-import * as path from "path";
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 function tryLoadFile(filePath: string): string | null {
   // Check for --characters flag

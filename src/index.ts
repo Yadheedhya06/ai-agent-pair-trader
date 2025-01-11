@@ -6,13 +6,11 @@ import {
   elizaLogger,
   generateText,
   type Character,
-  validateCharacterConfig,
   stringToUuid,
   type IDatabaseAdapter,
 } from "@ai16z/eliza";
-import { loadCharacters } from "./loader.ts";
-import { DirectClient } from "@ai16z/client-direct";
-import { pathToFileURL, fileURLToPath } from "url";
+import { loadCharacters } from "./scripts/loader.ts";
+import { fileURLToPath } from "url";
 
 // ES Module dirname equivalent
 const __filename = fileURLToPath(import.meta.url);

@@ -195,11 +195,6 @@ export const binancePairs = [
     "quoteAsset": "USDT"
   },
   {
-    "instrumentId": "DEFIUSDT",
-    "baseAsset": "DEFI",
-    "quoteAsset": "USDT"
-  },
-  {
     "instrumentId": "YFIUSDT",
     "baseAsset": "YFI",
     "quoteAsset": "USDT"
@@ -597,11 +592,6 @@ export const binancePairs = [
   {
     "instrumentId": "1000LUNCUSDT",
     "baseAsset": "1000LUNC",
-    "quoteAsset": "USDT"
-  },
-  {
-    "instrumentId": "LUNA2USDT",
-    "baseAsset": "LUNA2",
     "quoteAsset": "USDT"
   },
   {
