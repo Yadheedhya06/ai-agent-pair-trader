@@ -3,9 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import { z } from 'zod';
-import { binancePairs } from '../../assets/data/fetched/binancePairs';
-import { pairCoinOutliers } from '../../assets/data/helpers/pairOutliers';
-import { Coin, CoinSchema } from '../../types/coingecko';
+import { binancePairs } from '../assets/data/fetched/binancePairs';
+import { pairCoinOutliers } from '../assets/data/helpers/pairOutliers';
+import { Coin, CoinSchema } from '../types/coingecko';
 
 dotenv.config();
 

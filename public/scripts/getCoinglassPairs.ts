@@ -37,6 +37,8 @@ async function getSupportedExchangePairs() {
     }
 }
 
-getSupportedExchangePairs()
+(async () => {
+await getSupportedExchangePairs()
     .then(() => process.exit(0))
     .catch(() => process.exit(1));
+})();
