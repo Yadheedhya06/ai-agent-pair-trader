@@ -1,4 +1,6 @@
-import { PriceDataArray,CorrelationResult } from "../../types/correlation";
+import {   CorrelationStrength,
+    type PriceDataArray, 
+    type CorrelationResult  } from "../../types/correlation";
 
 export class CryptoCorrelationAnalyzer {
   private asset1Prices: PriceDataArray;
@@ -102,12 +104,12 @@ export class CryptoCorrelationAnalyzer {
     return Math.sqrt(squaredDiffs.reduce((sum, val) => sum + val, 0) / values.length);
   }
 
-  private interpretCorrelation(correlation: number): string {
+  private interpretCorrelation(correlation: number): CorrelationStrength {
     const abs = Math.abs(correlation);
-    if (abs >= 0.9) return 'Very Strong';
-    if (abs >= 0.7) return 'Strong';
-    if (abs >= 0.5) return 'Moderate';
-    if (abs >= 0.3) return 'Weak';
-    return 'Very Weak';
+    if (abs >= 0.9) return CorrelationStrength.VERY_STRONG;
+    if (abs >= 0.7) return CorrelationStrength.STRONG;
+    if (abs >= 0.5) return CorrelationStrength.MODERATE;
+    if (abs >= 0.3) return CorrelationStrength.WEAK;
+    return CorrelationStrength.VERY_WEAK;
   }
 }
