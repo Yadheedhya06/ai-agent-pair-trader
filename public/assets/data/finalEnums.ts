@@ -499,7 +499,7 @@ export const finalEnums = [
     "instrumentId": "ZENUSDT",
     "baseAsset": "ZEN",
     "quoteAsset": "USDT",
-    "coin_id": "horizen",
+    "coin_id": "zencash",
     "coin_symbol": "zen",
     "coin_name": "Horizen"
   },
@@ -2139,7 +2139,7 @@ export const finalEnums = [
     "instrumentId": "IOUSDT",
     "baseAsset": "IO",
     "quoteAsset": "USDT",
-    "coin_id": "io-net",
+    "coin_id": "io",
     "coin_symbol": "io",
     "coin_name": "io.net"
   },
@@ -2243,7 +2243,7 @@ export const finalEnums = [
     "instrumentId": "BRETTUSDT",
     "baseAsset": "BRETT",
     "quoteAsset": "USDT",
-    "coin_id": "brett-2",
+    "coin_id": "based-brett",
     "coin_symbol": "brett",
     "coin_name": "Brett"
   },
