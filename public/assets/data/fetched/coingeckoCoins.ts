@@ -20,11 +20,6 @@ export const coins = [
     "name": "1000SATS (Ordinals)"
   },
   {
-    "id": "shiba-inu",
-    "symbol": "shib",
-    "name": "Shiba Inu"
-  },
-  {
     "id": "1inch",
     "symbol": "1inch",
     "name": "1inch"
@@ -208,11 +203,6 @@ export const coins = [
     "id": "axie-infinity",
     "symbol": "axs",
     "name": "Axie Infinity"
-  },
-  {
-    "id": "axl-inu",
-    "symbol": "axl",
-    "name": "AXL INU"
   },
   {
     "id": "badger-dao",
@@ -470,11 +460,6 @@ export const coins = [
     "name": "CoW Protocol"
   },
   {
-    "id": "cryptosaga",
-    "symbol": "saga",
-    "name": "CryptoSaga"
-  },
-  {
     "id": "curve-dao-token",
     "symbol": "crv",
     "name": "Curve DAO"
@@ -673,11 +658,6 @@ export const coins = [
     "id": "frax-share",
     "symbol": "fxs",
     "name": "Frax Share"
-  },
-  {
-    "id": "fusotao",
-    "symbol": "tao",
-    "name": "Fusotao"
   },
   {
     "id": "gala",
@@ -990,11 +970,6 @@ export const coins = [
     "name": "Maverick Protocol"
   },
   {
-    "id": "medusa-metis",
-    "symbol": "metis",
-    "name": "Medusa"
-  },
-  {
     "id": "memecoin-2",
     "symbol": "meme",
     "name": "Memecoin"
@@ -1085,6 +1060,16 @@ export const coins = [
     "name": "Nervos Network"
   },
   {
+    "id": "origin-protocol",
+    "symbol": "ogn",
+    "name": "Origin Token"
+  },
+  {
+    "id": "baby-doge-coin",
+    "symbol": "babydoge",
+    "name": "Baby Doge Coin"
+  },
+  {
     "id": "neutron-3",
     "symbol": "ntrn",
     "name": "Neutron"
@@ -1093,11 +1078,6 @@ export const coins = [
     "id": "nfprompt-token",
     "symbol": "nfp",
     "name": "NFPrompt"
-  },
-  {
-    "id": "niccagewaluigielmo42069inu",
-    "symbol": "shib",
-    "name": "NicCageWaluigiElmo42069Inu"
   },
   {
     "id": "nkn",
@@ -1380,21 +1360,6 @@ export const coins = [
     "name": "Shiba Inu"
   },
   {
-    "id": "shiba-inu-wormhole",
-    "symbol": "shib",
-    "name": "Shiba Inu (Wormhole)"
-  },
-  {
-    "id": "shib-on-solana",
-    "symbol": "shib",
-    "name": "SHIB ON SOLANA"
-  },
-  {
-    "id": "shibwifhatcoin",
-    "symbol": "shib",
-    "name": "Shibwifhatcoin"
-  },
-  {
     "id": "simon-s-cat",
     "symbol": "cat",
     "name": "Simon's Cat"
@@ -1480,11 +1445,6 @@ export const coins = [
     "name": "StormX"
   },
   {
-    "id": "strategic-hub-for-innovation-in-blockchain",
-    "symbol": "shib",
-    "name": "Strategic Hub for Innovation in Blockchain"
-  },
-  {
     "id": "sudeng",
     "symbol": "hippo",
     "name": "sudeng"
@@ -1540,11 +1500,6 @@ export const coins = [
     "name": "Syscoin"
   },
   {
-    "id": "tao-meme",
-    "symbol": "tao",
-    "name": "Tao Meme"
-  },
-  {
     "id": "tellor",
     "symbol": "trb",
     "name": "Tellor Tributes"
@@ -1553,11 +1508,6 @@ export const coins = [
     "id": "tensor",
     "symbol": "tnsr",
     "name": "Tensor"
-  },
-  {
-    "id": "tensorium",
-    "symbol": "tnsr",
-    "name": "Tensorium"
   },
   {
     "id": "terra-luna",
@@ -1573,11 +1523,6 @@ export const coins = [
     "id": "tezos",
     "symbol": "xtz",
     "name": "Tezos"
-  },
-  {
-    "id": "the-anthropic-order",
-    "symbol": "tao",
-    "name": "The Anthropic Order"
   },
   {
     "id": "the-graph",
@@ -1703,11 +1648,6 @@ export const coins = [
     "id": "verge",
     "symbol": "xvg",
     "name": "Verge"
-  },
-  {
-    "id": "victorious",
-    "symbol": "w",
-    "name": "Victorious"
   },
   {
     "id": "vidt-dao",

@@ -13,6 +13,7 @@
     "format": "prettier --write src",
     "fetch:pairs": "bun run ./public/scripts/coinglass/getCoinglassPairs.ts",
     "fetch:coins": "bun run ./public/scripts/coingecko/getCoins.ts",
+    "finalEnums": "bun run ./public/assets/lib/mapPairsAndCoins.ts",
     "run-trader": "node --loader ts-node/esm ./src/index.ts"
   },
   "author": "yadheedhya",

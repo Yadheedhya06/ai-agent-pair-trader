@@ -24,12 +24,12 @@ async function getSupportedExchangePairs() {
         const filteredPairs =binancePairs.filter(pair => !pair.instrumentId.includes('_'));
         console.log('🚀 Total number of Binance Trading Pairs are: ',filteredPairs.length)
         
-        const filePath = path.join(__dirname, '..', '..', 'data', 'binancePairs.ts');
+        const filePath = path.join(__dirname, '..', '..', 'data', 'binancePairs.ts'); //TODO: update path
         const fileContent = `export const binancePairs = ${JSON.stringify(filteredPairs, null, 2)};`;
         
         fs.writeFileSync(filePath, fileContent);
         
-        console.log(`Binance pairs saved to ${filePath}`);
+        console.log(`✨ Binance pairs saved to ${filePath}`);
         
     } catch (error) {
         console.error('Error fetching supported exchange pairs:', error);

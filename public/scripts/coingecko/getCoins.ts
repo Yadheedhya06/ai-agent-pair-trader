@@ -3,7 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import { z } from 'zod';
-import { binancePairs } from '../../data/binancePairs';
+import { binancePairs } from '../../assets/data/fetched/binancePairs';
+import { pairCoinOutliers } from '../../assets/data/helpers/pairOutliers';
 import { Coin, CoinSchema } from '../../types/coingecko';
 
 dotenv.config();
@@ -24,22 +25,14 @@ async function getAllCoins() {
 
         const validatedData = z.array(CoinSchema).parse(response.data);
         console.log(`🚀 Total number of coins: ${validatedData.length}`);
-        const baseAssetToSymbolMap = new Map([
-            ['DODOX', 'dodo'],
-            ['RONIN', 'ron'], 
-            ['MYRO', '$myro'],
-            ['NEIROETH', 'neiro'],
-            ['RAYSOL', 'ray'],
-            ['VELODROME', 'velo']
-        ]);
 
         const missingBaseAssets = binancePairs
             .filter(pair => !validatedData.some(coin => {
                 const baseAsset = pair.baseAsset.toLowerCase();
                 const coinSymbol = coin.symbol.toLowerCase();
                 return baseAsset === coinSymbol || 
-                       (baseAssetToSymbolMap.has(pair.baseAsset) && 
-                        baseAssetToSymbolMap.get(pair.baseAsset)?.toLowerCase() === coinSymbol);
+                       (pairCoinOutliers.has(pair.baseAsset) && 
+                        pairCoinOutliers.get(pair.baseAsset)?.toLowerCase() === coinSymbol);
             }))
             .map(pair => pair.baseAsset);
 
@@ -62,8 +55,8 @@ async function getAllCoins() {
                 const coinSymbol = coin.symbol.toLowerCase();
                 const processedBaseAsset = baseAsset.match(/^[0-9]+(.+)$/)?.[1]?.toLowerCase() || baseAsset;
                 return baseAsset === coinSymbol || processedBaseAsset === coinSymbol ||
-                       (baseAssetToSymbolMap.has(pair.baseAsset) &&
-                        baseAssetToSymbolMap.get(pair.baseAsset)?.toLowerCase() === coinSymbol);
+                       (pairCoinOutliers.has(pair.baseAsset) &&
+                        pairCoinOutliers.get(pair.baseAsset)?.toLowerCase() === coinSymbol);
             });
             if (matchingCoins.length > 1) {
                 acc.push(pair.baseAsset);
@@ -79,14 +72,14 @@ async function getAllCoins() {
                 const coinSymbol = coin.symbol.toLowerCase();
                 const processedBaseAsset = baseAsset.match(/^[0-9]+(.+)$/)?.[1]?.toLowerCase() || baseAsset;
                 return baseAsset === coinSymbol || processedBaseAsset === coinSymbol ||
-                       (baseAssetToSymbolMap.has(pair.baseAsset) &&
-                        baseAssetToSymbolMap.get(pair.baseAsset)?.toLowerCase() === coinSymbol);
+                       (pairCoinOutliers.has(pair.baseAsset) &&
+                        pairCoinOutliers.get(pair.baseAsset)?.toLowerCase() === coinSymbol);
             })
         );
         
         console.log(`🎯 Filtered coins matching Binance pairs: ${filteredCoins.length}`);
 
-        const filePath = path.join(__dirname, '..', '..', 'data', 'coingeckoCoins.ts');
+        const filePath = path.join(__dirname, '..', '..', 'data', 'coingeckoCoins.ts'); //TODO: update path
         const fileContent = `export const coins = ${JSON.stringify(filteredCoins, null, 2)};`;
         
         fs.writeFileSync(filePath, fileContent);
