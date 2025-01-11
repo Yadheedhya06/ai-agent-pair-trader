@@ -1,0 +1,18 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearchPostgres"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model CoinPrices {
+    id           Int      @id @default(autoincrement())
+    coinId       String
+    instrumentId String
+    symbol       String
+    prices       Json
+    createdAt    DateTime @default(now())
+}

@@ -23,6 +23,7 @@
     "@ai16z/client-direct": "0.1.6-alpha.4",
     "@ai16z/eliza": "0.1.6-alpha.4",
     "@ai16z/plugin-0g": "0.1.6-alpha.4",
+    "@prisma/client": "^6.2.1",
     "@types/react": "^19.0.4",
     "@types/react-dom": "^19.0.2",
     "axios": "^1.7.9",
@@ -43,6 +44,7 @@
     "eslint": "^8.57.1",
     "jest": "^29.7.0",
     "prettier": "^3.4.2",
+    "prisma": "^6.2.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
