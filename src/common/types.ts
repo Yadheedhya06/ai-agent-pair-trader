@@ -51,3 +51,51 @@ export const CoinSchema = z.object({
 });
 
 export type Coin = z.infer<typeof CoinSchema>;
+
+export const FundingRateDataSchema = z.object({
+    t: z.number(),
+    o: z.string(),
+    h: z.string(),
+    l: z.string(),
+    c: z.string(),
+  });
+  
+export const FullFundingRateResponseSchema = z.object({
+    code: z.string(),
+    msg: z.string(),
+    data: z.array(FundingRateDataSchema),
+    success: z.boolean(),
+});
+
+export const FundingRateSchema = z.object({
+    data: z.array(FundingRateDataSchema)
+});
+  
+export type FullFundingRateResponse = z.infer<typeof FullFundingRateResponseSchema>;
+export type FundingRateResponse = z.infer<typeof FundingRateSchema>;
+
+export const PromptAssetMetricsSchema = z.object({
+    instrumentId: z.string(),
+    currentPrice: z.number(),
+    marketCap: z.number(),
+    fullyDilutedValuation: z.number(),
+    fdvRatio: z.number(),
+    volume: z.number(),
+    high24h: z.number(),
+    low24h: z.number(),
+    priceChange24h: z.number(),
+    circulatingSupply: z.number(),
+    maxSupply: z.number(),
+    totalSupply: z.number(),
+    lastPrice: z.number(),
+    tradingVolume: z.number(),
+    convertedLast: z.number(),
+    contractVolume: z.number(),
+    trustScore: z.number(),
+    currentFunding: z.string(),
+    FundingChange: z.string(),
+    HighFunding: z.string(),
+    lowFunding: z.string()
+  });
+  
+  export type PromptAssetMetrics = z.infer<typeof PromptAssetMetricsSchema>; 
