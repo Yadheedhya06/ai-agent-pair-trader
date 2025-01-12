@@ -53,11 +53,11 @@ export const CoinSchema = z.object({
 export type Coin = z.infer<typeof CoinSchema>;
 
 export const FundingRateDataSchema = z.object({
-    t: z.number(),
-    o: z.string(),
-    h: z.string(),
-    l: z.string(),
-    c: z.string(),
+    t: z.union([z.number(), z.string()]),
+    o: z.union([z.number(), z.string()]),
+    h: z.union([z.number(), z.string()]),
+    l: z.union([z.number(), z.string()]),
+    c: z.union([z.number(), z.string()]),
   });
   
 export const FullFundingRateResponseSchema = z.object({
@@ -76,26 +76,26 @@ export type FundingRateResponse = z.infer<typeof FundingRateSchema>;
 
 export const PromptAssetMetricsSchema = z.object({
     instrumentId: z.string(),
-    currentPrice: z.number(),
-    marketCap: z.number(),
-    fullyDilutedValuation: z.number(),
-    fdvRatio: z.number(),
-    volume: z.number(),
-    high24h: z.number(),
-    low24h: z.number(),
-    priceChange24h: z.number(),
-    circulatingSupply: z.number(),
-    maxSupply: z.number(),
-    totalSupply: z.number(),
-    lastPrice: z.number(),
-    tradingVolume: z.number(),
-    convertedLast: z.number(),
-    contractVolume: z.number(),
-    trustScore: z.number(),
-    currentFunding: z.string(),
-    FundingChange: z.string(),
-    HighFunding: z.string(),
-    lowFunding: z.string()
+    currentPrice: z.union([z.number(), z.string()]),
+    marketCap: z.union([z.number(), z.string()]),
+    fullyDilutedValuation: z.union([z.number(), z.string()]),
+    fdvRatio:  z.union([z.number(), z.string()]),
+    volume: z.union([z.number(), z.string()]),
+    high24h: z.union([z.number(), z.string()]),
+    low24h: z.union([z.number(), z.string()]),
+    priceChange24h: z.union([z.number(), z.string()]),
+    circulatingSupply: z.union([z.number(), z.string()]),
+    maxSupply: z.union([z.number(), z.string()]),
+    totalSupply: z.union([z.number(), z.string()]),
+    lastPrice: z.union([z.number(), z.string()]),
+    tradingVolume: z.union([z.number(), z.string()]),
+    convertedLast: z.union([z.number(), z.string()]),
+    contractVolume: z.union([z.number(), z.string()]),
+    trustScore: z.union([z.number(), z.string()]),
+    currentFunding: z.union([z.number(), z.string()]),
+    FundingChange: z.union([z.number(), z.string()]),
+    HighFunding: z.union([z.number(), z.string()]),
+    lowFunding: z.union([z.number(), z.string()])
   });
   
   export type PromptAssetMetrics = z.infer<typeof PromptAssetMetricsSchema>; 

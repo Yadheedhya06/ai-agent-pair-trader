@@ -1,10 +1,14 @@
 import { PromptAssetMetrics } from "./types";
 import { CorrelationResult } from "../../public/types/correlation";
 
-export function generateComparisonPrompt(asset1: PromptAssetMetrics, asset2: PromptAssetMetrics, correlations: CorrelationResult): string {
+export function promptTemplate(asset1: PromptAssetMetrics, asset2: PromptAssetMetrics, correlations: CorrelationResult): string {
     return `
-  You are analyzing two perpetual contract assets on Binance for Pair Trading: ${asset1.instrumentId} and ${asset2.instrumentId}
+  You are deciding positions two perpetual contract assets on Binance for Pair Trading: ${asset1.instrumentId} and ${asset2.instrumentId}
   Based on below Stats, Market data, Binance data and Funding Rate of both Assets you have to tell me which Asset suited for Long and which Asset suited for Short in pair trading.
+  You do not give explanation directly give one line telling which is long position which is short position.
+  Example: 
+    "BTCUSDT long, ETHUSDT short"
+    "PERPUSDT long, HFTUSDT short"
   
   Statistic calculation of Correlations between these two Asset pairs are :
   - Pearson Correlation: ${correlations.pearsonCorrelation}
