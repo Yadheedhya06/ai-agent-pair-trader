@@ -2936,14 +2936,6 @@ export const finalEnums = [
     "coin_name": "Zerebro"
   },
   {
-    "instrumentId": "BIOUSDT",
-    "baseAsset": "BIO",
-    "quoteAsset": "USDT",
-    "coin_id": "bio-protocol",
-    "coin_symbol": "bio",
-    "coin_name": "Bio Protocol"
-  },
-  {
     "instrumentId": "COOKIEUSDT",
     "baseAsset": "COOKIE",
     "quoteAsset": "USDT",
@@ -2967,20 +2959,4 @@ export const finalEnums = [
     "coin_symbol": "swarms",
     "coin_name": "Swarms"
   },
-  {
-    "instrumentId": "SONICUSDT",
-    "baseAsset": "SONIC",
-    "quoteAsset": "USDT",
-    "coin_id": "sonic-svm",
-    "coin_symbol": "sonic",
-    "coin_name": "Sonic SVM"
-  },
-  {
-    "instrumentId": "DUSDT",
-    "baseAsset": "D",
-    "quoteAsset": "USDT",
-    "coin_id": "dar-open-network",
-    "coin_symbol": "d",
-    "coin_name": "Dar Open Network"
-  }
 ];

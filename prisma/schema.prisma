@@ -16,3 +16,19 @@ model CoinPrices {
     prices       Json
     createdAt    DateTime @default(now())
 }
+
+model AssetCorrelations {
+    id                  Int      @id @default(autoincrement())
+    asset1              String
+    asset2              String
+    category            String
+    correlationStrength String
+    pearsonCorrelation  Float
+    stdDeviation        Float
+    createdAt           DateTime @default(now())
+
+    @@unique([asset1, asset2])
+    @@index([category])
+    @@index([asset1, category])
+    @@index([asset2, category])
+}

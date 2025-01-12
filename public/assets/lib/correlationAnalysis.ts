@@ -7,35 +7,51 @@ export class CryptoCorrelationAnalyzer {
   private asset2Prices: PriceDataArray;
 
   constructor(asset1Prices: PriceDataArray, asset2Prices: PriceDataArray) {
-    if (asset1Prices.length !== asset2Prices.length) {
-      throw new Error('Price arrays must have the same length');
-    }
-    
     this.asset1Prices = [...asset1Prices].sort((a, b) => a[0] - b[0]);
     this.asset2Prices = [...asset2Prices].sort((a, b) => a[0] - b[0]);
+  
+    const timestamps = new Set([
+      ...this.asset1Prices.map(p => p[0]),
+      ...this.asset2Prices.map(p => p[0])
+    ]);
+  
+    const asset1Map = new Map(this.asset1Prices.map(p => [p[0], p[1]]));
+    const asset2Map = new Map(this.asset2Prices.map(p => [p[0], p[1]]));
+  
+    // Interpolate missing values and create aligned arrays
+    const alignedPrices: [PriceDataArray, PriceDataArray] = [[], []];
     
-    const timestampsMismatch = this.asset1Prices.some((price, index) => 
-      price[0] !== this.asset2Prices[index][0]
-    );
-    if (timestampsMismatch) {
-      throw new Error('Timestamps must match between assets');
+    let lastAsset1Price: number | null = null;
+    let lastAsset2Price: number | null = null;
+  
+    Array.from(timestamps).sort((a, b) => a - b).forEach(timestamp => {
+      const price1 = asset1Map.get(timestamp);
+      const price2 = asset2Map.get(timestamp);
+  
+      // Skip if we don't have enough data for interpolation
+      if (price1 !== undefined) lastAsset1Price = price1;
+      if (price2 !== undefined) lastAsset2Price = price2;
+      
+      // Only add points when we have both prices (real or interpolated)
+      if (lastAsset1Price !== null && lastAsset2Price !== null) {
+        alignedPrices[0].push([timestamp, price1 ?? lastAsset1Price]);
+        alignedPrices[1].push([timestamp, price2 ?? lastAsset2Price]);
+      }
+    });
+  
+    [this.asset1Prices, this.asset2Prices] = alignedPrices;
+  
+    if (this.asset1Prices.length < 2) {
+      throw new Error('Insufficient data points after alignment');
     }
   }
 
   public analyze(windowSize: number = 30): CorrelationResult {
-    // Calculate returns (percentage changes)
     const returns1 = this.calculateReturns(this.asset1Prices);
     const returns2 = this.calculateReturns(this.asset2Prices);
 
     // Calculate Pearson correlation
     const pearsonCorrelation = this.calculatePearsonCorrelation(returns1, returns2);
-
-    // Calculate rolling correlations
-    const rollingCorrelations = this.calculateRollingCorrelations(returns1, returns2, windowSize);
-
-    // Calculate current price ratio
-    const priceRatio = this.asset1Prices[this.asset1Prices.length - 1][1] / 
-                      this.asset2Prices[this.asset2Prices.length - 1][1];
 
     // Calculate standard deviation of price ratio
     const ratios = this.asset1Prices.map((data, i) => 
@@ -46,8 +62,6 @@ export class CryptoCorrelationAnalyzer {
     return {
       pearsonCorrelation,
       correlationStrength: this.interpretCorrelation(pearsonCorrelation),
-      rollingCorrelations,
-      priceRatio,
       stdDeviation
     };
   }
@@ -77,27 +91,6 @@ export class CryptoCorrelationAnalyzer {
     return numerator / denominator;
   }
 
-  private calculateRollingCorrelations(
-    returns1: number[], 
-    returns2: number[], 
-    windowSize: number
-  ): Array<{timestamp: number, correlation: number}> {
-    const rollingCorrelations = [];
-
-    for (let i = windowSize; i < returns1.length; i++) {
-      const window1 = returns1.slice(i - windowSize, i);
-      const window2 = returns2.slice(i - windowSize, i);
-      const correlation = this.calculatePearsonCorrelation(window1, window2);
-
-      rollingCorrelations.push({
-        timestamp: this.asset1Prices[i][0],
-        correlation
-      });
-    }
-
-    return rollingCorrelations;
-  }
-
   private calculateStdDeviation(values: number[]): number {
     const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
     const squaredDiffs = values.map(val => Math.pow(val - mean, 2));
@@ -107,8 +100,8 @@ export class CryptoCorrelationAnalyzer {
   private interpretCorrelation(correlation: number): CorrelationStrength {
     const abs = Math.abs(correlation);
     if (abs >= 0.9) return CorrelationStrength.VERY_STRONG;
-    if (abs >= 0.7) return CorrelationStrength.STRONG;
-    if (abs >= 0.5) return CorrelationStrength.MODERATE;
+    if (abs >= 0.75) return CorrelationStrength.STRONG;
+    if (abs >= 0.65) return CorrelationStrength.MODERATE;
     if (abs >= 0.3) return CorrelationStrength.WEAK;
     return CorrelationStrength.VERY_WEAK;
   }

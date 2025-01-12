@@ -22,8 +22,6 @@ export class TradingPairGenerator {
         this.pairs = [];
         this.processedPairs.clear();
         
-        const totalAssets = this.assets.length;
-        
         let currentIteration = 0;
 
         for (let i = 0; i < this.assets.length; i++) {

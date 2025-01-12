@@ -24,6 +24,19 @@ export class DatabaseService {
     }
   }
 
+  async batchInsertCorrelations(correlations: Prisma.AssetCorrelationsCreateInput[]) {
+    try {
+      const result = await prisma.assetCorrelations.createMany({
+        data: correlations,
+        skipDuplicates: true,
+      });
+      return result;
+    } catch (error) {
+      console.error('Error in batchInsertCorrelations:', error);
+      throw error;
+    }
+}
+
   async getAllCoinPrices(){
     try {
       const coinPrices = await prisma.coinPrices.findMany({

@@ -23,8 +23,6 @@ export enum CorrelationStrength {
 export const CorrelationResultSchema = z.object({
   pearsonCorrelation: z.number(),
   correlationStrength: z.nativeEnum(CorrelationStrength),
-  rollingCorrelations: z.array(RollingCorrelationItemSchema),
-  priceRatio: z.number(),
   stdDeviation: z.number()
 });
 
