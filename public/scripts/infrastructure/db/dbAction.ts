@@ -22,4 +22,23 @@ export class DatabaseService {
       throw error;
     }
   }
+
+  async getAllCoinPrices() {
+    try {
+      const coinPrices = await prisma.coinPrices.findMany({
+        orderBy: {
+          createdAt: 'desc'
+        }
+      });
+
+      // Parse the JSON prices string back to array
+      return coinPrices.map(coin => ({
+        ...coin,
+        prices: JSON.parse(coin.prices as string)
+      }));
+    } catch (error) {
+      console.error('Error in getAllCoinPrices:', error);
+      throw error;
+    }
+  }
 }
