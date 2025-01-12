@@ -1,15 +1,15 @@
-import cliProgress from 'cli-progress';
 import colors from 'colors';
 import { 
     CryptoAsset, 
-    TradingPair, 
+    PairSchema, 
     assetCategories, 
     relatedCategories ,
-    AssetCategory
+    AssetCategory,
+    TradingPair
 } from "../../types/utils";
 
-class TradingPairGenerator {
-    private pairs: TradingPair[] = [];
+export class TradingPairGenerator {
+    private pairs: PairSchema[] = [];
     private processedPairs: Set<string> = new Set();
     private readonly stablecoins = ['USDT', 'USDC', 'BUSD'];
 
@@ -23,47 +23,19 @@ class TradingPairGenerator {
         this.processedPairs.clear();
         
         const totalAssets = this.assets.length;
-        const totalIterations = (totalAssets * (totalAssets - 1)) / 2;
         
-        const pairGenerationBar = new cliProgress.SingleBar({
-            format: colors.cyan(
-                'Generating Pairs |' + 
-                colors.cyan('{bar}') + 
-                '| {percentage}% || {value}/{total} Pairs || ETA: {eta}s'
-            ),
-            barCompleteChar: '\u2588',
-            barIncompleteChar: '\u2591',
-            hideCursor: true
-        });
-
-        pairGenerationBar.start(totalIterations, 0);
         let currentIteration = 0;
 
         for (let i = 0; i < this.assets.length; i++) {
             for (let j = i + 1; j < this.assets.length; j++) {
                 this.processPair(this.assets[i], this.assets[j]);
                 currentIteration++;
-                pairGenerationBar.update(currentIteration);
             }
         }
 
-        pairGenerationBar.stop();
-
         const seenPairs = new Set<string>();
-        const uniquePairs: TradingPair[] = [];
+        const uniquePairs: PairSchema[] = [];
 
-        const uniquePairsBar = new cliProgress.SingleBar({
-            format: colors.cyan(
-                'Processing Unique Pairs |' + 
-                colors.cyan('{bar}') + 
-                '| {percentage}% || {value}/{total} Pairs || ETA: {eta}s'
-            ),
-            barCompleteChar: '\u2588',
-            barIncompleteChar: '\u2591',
-            hideCursor: true
-        });
-
-        uniquePairsBar.start(this.pairs.length, 0);
         let processedCount = 0;
 
         for (const pair of this.pairs) {
@@ -76,13 +48,14 @@ class TradingPairGenerator {
                 seenPairs.add(key2);
             }
             processedCount++;
-            uniquePairsBar.update(processedCount);
         }
 
-        uniquePairsBar.stop();
-
         console.log(colors.green(`\n✨ Total number of Pairs generated: ${uniquePairs.length}`));
-        return uniquePairs;
+        return uniquePairs.map(pair => ({
+            asset1: pair.asset1.instrumentId,
+            asset2: pair.asset2.instrumentId,
+            category: pair.category
+        }));
     }
 
     /**
@@ -157,5 +130,3 @@ class TradingPairGenerator {
                relatedCategories[category2]?.includes(category1);
     }
 }
-
-export { TradingPairGenerator };

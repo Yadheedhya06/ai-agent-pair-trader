@@ -1,10 +1,11 @@
 import { PrismaClient } from '@prisma/client';
-import { CoinPriceInput, CoinPriceInputSchema } from '../../../types/db';
+import { Prisma } from '@prisma/client';
+import { CoinPriceInputSchema } from '../../../types/db';
 
 const prisma = new PrismaClient();
 
 export class DatabaseService {
-  async batchUpsertCoinPrices(coinPrices: CoinPriceInput[]) {
+  async batchUpsertCoinPrices(coinPrices: Prisma.CoinPricesCreateInput[]) {
     try {
       coinPrices.forEach(coin => CoinPriceInputSchema.parse(coin));
       const result = await prisma.coinPrices.createMany({
@@ -23,7 +24,7 @@ export class DatabaseService {
     }
   }
 
-  async getAllCoinPrices() {
+  async getAllCoinPrices(){
     try {
       const coinPrices = await prisma.coinPrices.findMany({
         orderBy: {
@@ -31,7 +32,6 @@ export class DatabaseService {
         }
       });
 
-      // Parse the JSON prices string back to array
       return coinPrices.map(coin => ({
         ...coin,
         prices: JSON.parse(coin.prices as string)

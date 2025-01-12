@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { string, z } from 'zod';
 
 export const CryptoAssetSchema = z.object({
     instrumentId: z.string(),
@@ -9,13 +9,21 @@ export const CryptoAssetSchema = z.object({
     coin_name: z.string()
 });
 
-export const TradingPairSchema = z.object({
+export const PairSchema = z.object({
     asset1: CryptoAssetSchema,
     asset2: CryptoAssetSchema,
     category: z.string()
 });
 
+export const TradingPairSchema = z.object({
+    asset1: z.string(),
+    asset2: z.string(),
+    category: z.string()
+});
+
+
 export type CryptoAsset = z.infer<typeof CryptoAssetSchema>;
+export type PairSchema = z.infer<typeof PairSchema>;
 export type TradingPair = z.infer<typeof TradingPairSchema>;
 
     
@@ -44,14 +52,14 @@ export type AssetCategory =
     | 'other';
 
 export const relatedCategories: Record<AssetCategory, AssetCategory[]> = {
-    'layer1': ['defi', 'layer2'],
-    'defi': ['layer1', 'layer2', 'exchange'],
-    'gaming': ['layer1'],
-    'exchange': ['defi', 'layer1'],
-    'layer2': ['layer1', 'defi'],
-    'oracle': ['defi', 'layer1'],
-    'storage': ['layer1'],
-    'privacy': ['layer1'],
-    'meme': ['meme'],
+    'layer1': ['defi', 'layer2', 'other'],
+    'defi': ['layer1', 'layer2', 'exchange', 'other'],
+    'gaming': ['layer1', 'other'],
+    'exchange': ['defi', 'layer1', 'other'],
+    'layer2': ['layer1', 'defi', 'other'],
+    'oracle': ['defi', 'layer1', 'other'],
+    'storage': ['layer1', 'other'],
+    'privacy': ['layer1', 'other'],
+    'meme': ['meme', 'other'],
     'other': []
 };
