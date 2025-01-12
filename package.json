@@ -19,6 +19,7 @@
     "finalEnums": "bun run ./public/scripts/mapPairsAndCoins.ts",
     "insert:coins": "tsx ./public/scripts/upsertCoinsToDb.ts",
     "insert:pairs": "tsx ./public/scripts/upsertPairsToDb.ts",
+    "test:agent": "tsx ./src/app/api/discord/index.ts",
     "run-trader": "node --loader ts-node/esm ./src/index.ts"
   },
   "author": "yadheedhya",

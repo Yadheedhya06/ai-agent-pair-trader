@@ -100,8 +100,8 @@ export class CryptoCorrelationAnalyzer {
   private interpretCorrelation(correlation: number): CorrelationStrength {
     const abs = Math.abs(correlation);
     if (abs >= 0.9) return CorrelationStrength.VERY_STRONG;
-    if (abs >= 0.75) return CorrelationStrength.STRONG;
-    if (abs >= 0.65) return CorrelationStrength.MODERATE;
+    if (abs >= 0.85) return CorrelationStrength.STRONG;
+    if (abs >= 0.8) return CorrelationStrength.MODERATE;
     if (abs >= 0.3) return CorrelationStrength.WEAK;
     return CorrelationStrength.VERY_WEAK;
   }

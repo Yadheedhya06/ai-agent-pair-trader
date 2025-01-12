@@ -18,6 +18,11 @@ async function main() {
         const pair1Prices = asset1Data?.prices || [];
         const pair2Prices = asset2Data?.prices || [];
 
+        const analysis = new CryptoCorrelationAnalyzer(pair1Prices, pair2Prices).analyze(30);
+        
+        if (analysis.stdDeviation < 0.1 || analysis.stdDeviation > 1.0) {
+            return null;
+        }
         
         return {
             asset1: {
@@ -29,9 +34,9 @@ async function main() {
                 prices: pair2Prices
             },
             category: pair.category,
-            analysis: new CryptoCorrelationAnalyzer(pair1Prices, pair2Prices).analyze(30)
+            analysis
         };
-    });
+    }).filter(pair => pair !== null);
 
     const veryStrongCount = enrichedPairs.filter(pair => pair.analysis.correlationStrength === CorrelationStrength.VERY_STRONG).length;
     const strongCount = enrichedPairs.filter(pair => pair.analysis.correlationStrength === CorrelationStrength.STRONG).length;
