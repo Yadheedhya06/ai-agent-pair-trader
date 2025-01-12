@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import { z } from 'zod';
 import { binancePairs } from '../assets/data/fetched/binancePairs';
 import { pairCoinOutliers } from '../assets/data/helpers/pairOutliers';
-import { Coin, CoinSchema } from '../types/coingecko';
+import { CoinList, CoinSchema } from '../types/coingecko';
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ const BASE_URL = 'https://pro-api.coingecko.com/api/v3';
 
 async function getAllCoins() {
     try {
-        const response = await axios.get<Coin[]>(`${BASE_URL}/coins/list`, {
+        const response = await axios.get<CoinList[]>(`${BASE_URL}/coins/list`, {
             headers: {
                 'accept': 'application/json',
                 'x-cg-pro-api-key': COINGECKO_API_KEY
