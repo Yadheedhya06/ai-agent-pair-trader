@@ -12,9 +12,12 @@
     "test": "jest",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src",
-    "fetch:pairs": "bun run ./public/scripts/coinglass/getCoinglassPairs.ts",
-    "fetch:coins": "bun run ./public/scripts/coingecko/getCoins.ts",
-    "finalEnums": "bun run ./public/assets/lib/mapPairsAndCoins.ts",
+    "postinstall": "prisma generate",
+    "fetch:pairs": "bun run ./public/scripts/getCoinglassPairs.ts",
+    "fetch:coins": "bun run ./public/scripts/getCoins.ts",
+    "finalEnums": "bun run ./public/scripts/mapPairsAndCoins.ts",
+    "insert:coins": "tsx ./public/scripts/upsertCoinsToDb.ts",
+    "insert:pairs": "tsx ./public/scripts/upsertPairsToDb.ts",
     "run-trader": "node --loader ts-node/esm ./src/index.ts"
   },
   "author": "yadheedhya",
@@ -23,9 +26,12 @@
     "@ai16z/client-direct": "0.1.6-alpha.4",
     "@ai16z/eliza": "0.1.6-alpha.4",
     "@ai16z/plugin-0g": "0.1.6-alpha.4",
+    "@prisma/client": "^6.2.1",
     "@types/react": "^19.0.4",
     "@types/react-dom": "^19.0.2",
     "axios": "^1.7.9",
+    "cli-progress": "^3.12.0",
+    "colors": "^1.4.0",
     "dotenv": "^16.4.7",
     "next": "^15.1.4",
     "react": "^19.0.0",
@@ -34,6 +40,8 @@
   },
   "devDependencies": {
     "@babel/parser": "^7.26.3",
+    "@types/cli-progress": "^3.11.6",
+    "@types/colors": "^1.2.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.12",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
@@ -43,8 +51,10 @@
     "eslint": "^8.57.1",
     "jest": "^29.7.0",
     "prettier": "^3.4.2",
+    "prisma": "^6.2.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   }
 }

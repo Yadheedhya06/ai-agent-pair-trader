@@ -1,7 +1,7 @@
-import { binancePairs } from '../data/fetched/binancePairs';
-import { coins } from '../data/fetched/coingeckoCoins';
-import { pairCoinOutliers } from '../data/helpers/pairOutliers';
-import type { Coin } from '../../types/coingecko';
+import { binancePairs } from '../assets/data/fetched/binancePairs';
+import { coins } from '../assets/data/fetched/coingeckoCoins';
+import { pairCoinOutliers } from '../assets/data/helpers/pairOutliers';
+import type { Coin } from '../types/coingecko';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 

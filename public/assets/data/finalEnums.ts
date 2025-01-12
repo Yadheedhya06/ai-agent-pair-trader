@@ -499,7 +499,7 @@ export const finalEnums = [
     "instrumentId": "ZENUSDT",
     "baseAsset": "ZEN",
     "quoteAsset": "USDT",
-    "coin_id": "horizen",
+    "coin_id": "zencash",
     "coin_symbol": "zen",
     "coin_name": "Horizen"
   },
@@ -2139,7 +2139,7 @@ export const finalEnums = [
     "instrumentId": "IOUSDT",
     "baseAsset": "IO",
     "quoteAsset": "USDT",
-    "coin_id": "io-net",
+    "coin_id": "io",
     "coin_symbol": "io",
     "coin_name": "io.net"
   },
@@ -2243,7 +2243,7 @@ export const finalEnums = [
     "instrumentId": "BRETTUSDT",
     "baseAsset": "BRETT",
     "quoteAsset": "USDT",
-    "coin_id": "brett-2",
+    "coin_id": "based-brett",
     "coin_symbol": "brett",
     "coin_name": "Brett"
   },
@@ -2936,14 +2936,6 @@ export const finalEnums = [
     "coin_name": "Zerebro"
   },
   {
-    "instrumentId": "BIOUSDT",
-    "baseAsset": "BIO",
-    "quoteAsset": "USDT",
-    "coin_id": "bio-protocol",
-    "coin_symbol": "bio",
-    "coin_name": "Bio Protocol"
-  },
-  {
     "instrumentId": "COOKIEUSDT",
     "baseAsset": "COOKIE",
     "quoteAsset": "USDT",
@@ -2967,20 +2959,4 @@ export const finalEnums = [
     "coin_symbol": "swarms",
     "coin_name": "Swarms"
   },
-  {
-    "instrumentId": "SONICUSDT",
-    "baseAsset": "SONIC",
-    "quoteAsset": "USDT",
-    "coin_id": "sonic-svm",
-    "coin_symbol": "sonic",
-    "coin_name": "Sonic SVM"
-  },
-  {
-    "instrumentId": "DUSDT",
-    "baseAsset": "D",
-    "quoteAsset": "USDT",
-    "coin_id": "dar-open-network",
-    "coin_symbol": "d",
-    "coin_name": "Dar Open Network"
-  }
 ];

@@ -2,7 +2,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
-import { CoinglassResponse, CoinglassResponseSchema } from '../../types/coinglass';
+import { CoinglassResponse, CoinglassResponseSchema } from '../types/coinglass';
 
 dotenv.config();
 
@@ -37,6 +37,8 @@ async function getSupportedExchangePairs() {
     }
 }
 
-getSupportedExchangePairs()
+(async () => {
+await getSupportedExchangePairs()
     .then(() => process.exit(0))
     .catch(() => process.exit(1));
+})();
