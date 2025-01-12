@@ -12,6 +12,7 @@
     "test": "jest",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src",
+    "postinstall": "prisma generate",
     "fetch:pairs": "bun run ./public/scripts/getCoinglassPairs.ts",
     "fetch:coins": "bun run ./public/scripts/getCoins.ts",
     "finalEnums": "bun run ./public/scripts/mapPairsAndCoins.ts",
