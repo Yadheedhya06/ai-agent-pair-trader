@@ -27,7 +27,7 @@ interface Plugin {
 }
 
 // Minimal DatabaseAdapter Mock
-const minimalDatabaseAdapter: IDatabaseAdapter = {
+export const minimalDatabaseAdapter: IDatabaseAdapter = {
   db: null,
   init: async () => {},
   close: async () => {},
@@ -75,7 +75,7 @@ const minimalDatabaseAdapter: IDatabaseAdapter = {
 };
 
 // Cache Adapter Implementation
-class CompatibleCacheAdapter {
+export class CompatibleCacheAdapter {
   private data = new Map<string, string>();
 
   async get<T = unknown>(key: string): Promise<T | undefined> {
@@ -217,7 +217,7 @@ function isStringArray(plugins: unknown): plugins is string[] {
 async function main() {
   elizaLogger.info("Starting Eliza Agent...");
 
-  const characters: Character[] = await loadCharacters("/Users/yadheedhyaindugubilli/Developer/Projects/Personal/Self/ai-agent-pair-trader/characters/trade.character.json");
+  const characters: Character[] = await loadCharacters();
   const localPlugins = await loadLocalPlugins();
   console.log(
     `DEBUG: Local plugins loaded: ${localPlugins.map((p) => p.name).join(", ")}`,

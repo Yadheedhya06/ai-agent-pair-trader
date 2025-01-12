@@ -5,7 +5,7 @@ export const CoinSchema = z.object({
     symbol: z.string(),
     name: z.string(),
 });
-export type Coin = z.infer<typeof CoinSchema>;
+export type CoinList = z.infer<typeof CoinSchema>;
 
 export const HistoricalPriceDataSchema = z.object({
     prices: z.array(z.tuple([z.number(), z.number()])),

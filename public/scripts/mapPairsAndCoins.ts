@@ -1,7 +1,7 @@
 import { binancePairs } from '../assets/data/fetched/binancePairs';
 import { coins } from '../assets/data/fetched/coingeckoCoins';
 import { pairCoinOutliers } from '../assets/data/helpers/pairOutliers';
-import type { Coin } from '../types/coingecko';
+import type { CoinList } from '../types/coingecko';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 
@@ -13,8 +13,8 @@ function normalizeBaseAsset(baseAsset: string): string {
     return normalized.toLowerCase();
 }
 
-function mapPairsAndCoins(coingeckoCoins: Coin[]) {
-    const multipleMatches = new Map<string, Coin[]>();
+function mapPairsAndCoins(coingeckoCoins: CoinList[]) {
+    const multipleMatches = new Map<string, CoinList[]>();
     const noMatches = new Set<string>();
 
     const mappedPairs = binancePairs.map(pair => {
@@ -94,7 +94,7 @@ function mapPairsAndCoins(coingeckoCoins: Coin[]) {
 }
 
 
-const coingeckoCoins: Coin[] = coins;
+const coingeckoCoins: CoinList[] = coins;
 const mappedResults = mapPairsAndCoins(coingeckoCoins);
 
 const finalEnumsContent = `export const finalEnums = ${JSON.stringify(mappedResults, null, 2)};`;

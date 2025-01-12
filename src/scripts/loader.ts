@@ -28,15 +28,13 @@ function isAllStrings(arr: unknown[]): boolean {
   return Array.isArray(arr) && arr.every((item) => typeof item === "string");
 }
 
-export async function loadCharacters(
-  characterPath: string,
-): Promise<Character[]> {
+export async function loadCharacters(): Promise<Character[]> {
   const loadedCharacters: Character[] = [];
-  const content = tryLoadFile(characterPath);
+  const content = tryLoadFile("/Users/yadheedhyaindugubilli/Developer/Projects/Personal/Self/ai-agent-pair-trader/characters/trade.character.json");
 
   if (!content) {
     elizaLogger.error(
-      `Error loading character from ${characterPath}: File not found`,
+      `Error loading character from /Users/yadheedhyaindugubilli/Developer/Projects/Personal/Self/ai-agent-pair-trader/characters/trade.character.json: File not found`,
     );
     process.exit(1);
   }
@@ -57,9 +55,9 @@ export async function loadCharacters(
     }
 
     loadedCharacters.push(character);
-    elizaLogger.info(`Successfully loaded character from: ${characterPath}`);
+    elizaLogger.info(`Successfully loaded character`);
   } catch (e) {
-    elizaLogger.error(`Error parsing character from ${characterPath}: ${e}`);
+    elizaLogger.error(`Error parsing character from`);
     process.exit(1);
   }
 
