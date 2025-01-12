@@ -10,8 +10,9 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
-    "lint": "eslint src --ext .ts",
-    "format": "prettier --write src",
+    "format": "biome format . --write",
+    "lint": "lint-staged --allow-empty",
+    "lint:fix": "pnpm lint --apply",
     "postinstall": "prisma generate",
     "fetch:pairs": "bun run ./public/scripts/getCoinglassPairs.ts",
     "fetch:coins": "bun run ./public/scripts/getCoins.ts",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "@babel/parser": "^7.26.3",
+    "@biomejs/biome": "^1.9.4",
     "@types/cli-progress": "^3.11.6",
     "@types/colors": "^1.2.4",
     "@types/jest": "^29.5.14",
@@ -56,5 +58,15 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
-  }
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9"
+  },
+  "lint-staged": {
+    "*.{js,mjs,jsx,ts,tsx,json}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
+  },
+  "packageManager": "pnpm@9.1.3"
 }
