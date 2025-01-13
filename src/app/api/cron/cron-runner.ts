@@ -17,12 +17,12 @@ export const cronRunner = async (
   request: NextRequest,
   run: () => Promise<void>,
 ) => {
-//   const authHeader = request.headers.get('authorization')
-//   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-//     return new Response('Unauthorized', {
-//       status: 401,
-//     })
-//   }
+  const authHeader = request.headers.get('authorization')
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response('Unauthorized', {
+      status: 401,
+    })
+  }
 
   console.log('🚀 Running the cron job')
 
