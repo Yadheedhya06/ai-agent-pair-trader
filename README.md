@@ -115,6 +115,20 @@ For efficiency and focus on the most meaningful relationships, we store only pai
 
 This results in a total of 448 high-quality pairs being actively tracked and available for analysis.
 
+## Environment Setup
+
+you'll need to set up the following environment variables in a `.env` file:
+```
+OPENAI_API_KEY =                        //paste your openai api(No free tier)
+COINGLASS_API_KEY =                     //paste your coinglass api(No free tier)
+COINGECKO_API_KEY =                     // paste your coingecko api key(No free tier)
+DATABASE_URL =                          //paste your database url(Free tier available)
+DISCORD_BOT_TOKEN =                     // paste your discord bot token
+DISCORD_CHANNEL_ID =                    // paste your dicord channel id
+```
+
+
+
 
 ## Data Collection and Processing
 
@@ -145,6 +159,61 @@ After identifying correlated pairs, our system:
 
 This data collection process runs every 10 minutes via a scheduled cron job, ensuring our analysis stays current with market conditions.
 
+4. **AI Analysis and Response Generation**
+   - Aggregates collected data into a structured format:
+     - Correlation pair details
+     - Market data for both assets
+     - Funding rates
+     - Trading metrics
+   - Processes through a prompt template system that:
+     - Formats data consistently
+     - Highlights key relationships
+     - Emphasizes significant market movements
+   - Passes formatted prompt to Eliza runtime AI agent which:
+     - Analyzes market conditions
+     - Evaluates correlation strength
+     - Identifies trading opportunities
+     - Generates natural language insights
+   - Returns structured response containing:
+     - Market analysis
+     - Trading recommendations
+     - Risk assessments
+     - Supporting data points
+
+The AI agent's response is then formatted and delivered through Discord, providing traders with actionable insights based on correlation analysis and current market conditions.
+
+5. **Discord Alert Distribution**
+   The system sends formatted alerts to Discord that include:
+   - **Correlation Analysis**
+     - Pair identification (e.g., BTC/ETH)
+     - Correlation strength category
+     - Correlation coefficient value
+   
+   - **Market Context**
+     - Current prices for both assets
+     - 24h price changes
+     - Trading volumes
+     - Market sentiment indicators
+   
+   - **AI-Generated Insights**
+     - Natural language market analysis
+     - Pattern identification
+     - Potential trading opportunities
+     - Risk considerations
+   
+   - **Technical Metrics**
+     - Funding rates comparison
+     - Volume analysis
+     - Price momentum indicators
+     - Market depth assessment
+
+The Discord alerts are designed to be:
+- Concise yet comprehensive
+- Easy to read and understand
+- Actionable for traders
+- Backed by data and analysis
+
+Alerts are delivered every 10 minutes, providing regular updates while avoiding alert fatigue. Each message is structured to highlight the most important information first, with supporting details available for those who want to dive deeper.
 
 
 
