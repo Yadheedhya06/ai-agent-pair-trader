@@ -7,7 +7,7 @@ export default function Home() {
                 </h1>
 
                 <p className="text-white text-3xl mb-20 leading-relaxed">
-                    To use this bot, please add it to your Discord server clicking button below and contact Dev to get agent permission for pair trades in your channel.
+                    To use this agent, please add it to your Discord server clicking button below and contact Dev to get agent permission for pair trades in your channel.
                 </p>
 
                 <a
