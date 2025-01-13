@@ -41,7 +41,7 @@ export const TickerSchema = z.object({
   converted_volume: z.object({
     usd: z.number()
   }),
-  trust_score: z.string(),
+  trust_score: z.union([z.string(), z.null()]),
 });
 
 export const CoinSchema = z.object({

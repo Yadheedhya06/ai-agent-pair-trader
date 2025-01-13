@@ -11,8 +11,7 @@ import { loadCharacters } from "@/scripts/loader";
 import { CompatibleCacheAdapter } from "@/index";
 
 async function main() {
-  const startTime = performance.now();
-  
+
   const correlationStrengths = [
     CorrelationStrength.VERY_STRONG, 
     CorrelationStrength.STRONG,
@@ -80,22 +79,10 @@ async function main() {
       trust_score: ticker.trust_score
     }));
 
-  console.log('Asset 1 Market Data:', asset1MarketData);
-  console.log('Asset 1 Ticker Data:', asset1TickerData);
-  console.log('Asset 2 Market Data:', asset2MarketData); 
-  console.log('Asset 2 Ticker Data:', asset2TickerData);
-  
-  const endTime = performance.now();
-  const executionTime = endTime - startTime;
-  console.log(`Function execution time: ${executionTime.toFixed(2)} milliseconds`);
-
   const [fundingRateAsset1, fundingRateAsset2] = await Promise.all([
     getFundingRate(pair.asset1),
     getFundingRate(pair.asset2)
-  ]);
-  
-  console.log('Funding Rate Asset 1:', fundingRateAsset1);
-  console.log('Funding Rate Asset 2:', fundingRateAsset2);
+  ]);  
 
   const promptConfigAsset1: PromptAssetMetrics = {
     instrumentId: pair.asset1,
@@ -153,7 +140,7 @@ async function main() {
 
   const finalPrompt = promptTemplate(promptConfigAsset1, promptConfigAsset2, promptConfigCorrelation)
   const characters = await loadCharacters()
-    const character = characters[0]
+  const character = characters[0]
 
 
   const runtime = new AgentRuntime({
@@ -174,7 +161,23 @@ async function main() {
     context: finalPrompt,
     modelClass: "medium"
   })
-  console.log('Response from model is: ',response)
+
+  const parseModelResponse = (response: string) => {
+    const lines = response.split('\n');
+    return {
+      long: lines[0].split(':')[1].trim(),
+      short: lines[1].split(':')[1].trim(),
+      pearsonCorrelation: parseFloat(lines[2].split(':')[1].trim()),
+      standardDeviation: parseFloat(lines[3].split(':')[1].trim()),
+      remarks: lines[4].split(':')[1].trim()
+    };
+  };
+
+  const parsedResponse = {
+    ...parseModelResponse(response),
+    related: `${pair.correlationStrength}ly`
+  };
+  console.log('Parsed response:', parsedResponse);
 }
 
 main().catch(console.error);
