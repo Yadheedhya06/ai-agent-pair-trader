@@ -5,6 +5,7 @@ import {
   Ticker,
   FundingRateResponse
 } from './types';
+import { AxiosError } from 'axios'
 
 export class ApiError extends Error {
   constructor(
@@ -14,6 +15,14 @@ export class ApiError extends Error {
     super(message);
     this.name = "ApiError";
   }
+}
+
+export const getMessageFromError = (e: unknown) => {
+  return e instanceof AxiosError
+    ? e.response?.data
+    : e instanceof Error
+      ? e.message
+      : e
 }
 
 export const validateSearchQuery = (content: Content): string => {

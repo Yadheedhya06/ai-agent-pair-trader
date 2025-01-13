@@ -6,7 +6,7 @@ import { CoinglassResponse, CoinglassResponseSchema } from '../types/coinglass';
 
 dotenv.config();
 
-const COINGLASS_API_KEY = process.env.COINGLASS_API;
+const COINGLASS_API_KEY = process.env.COINGLASS_API_KEY;
 const BASE_URL = 'https://open-api-v3.coinglass.com';
 
 async function getSupportedExchangePairs() {

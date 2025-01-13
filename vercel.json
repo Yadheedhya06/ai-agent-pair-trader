@@ -1,0 +1,8 @@
+{
+    "crons": [
+        {
+            "path": "/api/discord",
+            "schedule": "*/5 * * * *"
+        }
+    ]
+}
