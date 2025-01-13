@@ -8,7 +8,11 @@
  - Natural language processing for human-friendly market analysis
  - Scheduled cron jobs for continuous market monitoring
  - Prisma database for storing historical correlation data
- 
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ff7088e1-0ea8-4bb0-966d-7317d1c5eed5" alt="AI-Powered Pairs Trading Agent" width="500">
+</p>
+
 ```
 Directory structure:
 └── yadheedhya06-ai-agent-pair-trader/
