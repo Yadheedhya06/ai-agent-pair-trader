@@ -1,4 +1,4 @@
-{
+export const agentTrader = {
   "name": "Trade Analyser",
   "plugins": [],
   "clients": [],

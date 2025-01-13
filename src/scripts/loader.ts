@@ -5,6 +5,7 @@ import {
   defaultCharacter,
 } from "@ai16z/eliza";
 import fs from "fs";
+import { agentTrader } from "../../characters/trade.character";
 
 function tryLoadFile(filePath: string): string | null {
   // Check for --characters flag
@@ -30,17 +31,9 @@ function isAllStrings(arr: unknown[]): boolean {
 
 export async function loadCharacters(): Promise<Character[]> {
   const loadedCharacters: Character[] = [];
-  const content = tryLoadFile("/Users/yadheedhyaindugubilli/Developer/Projects/Personal/Self/ai-agent-pair-trader/characters/trade.character.json");
-
-  if (!content) {
-    elizaLogger.error(
-      `Error loading character from /Users/yadheedhyaindugubilli/Developer/Projects/Personal/Self/ai-agent-pair-trader/characters/trade.character.json: File not found`,
-    );
-    process.exit(1);
-  }
 
   try {
-    const character = JSON.parse(content);
+    const character = agentTrader as Character;
     validateCharacterConfig(character);
 
     if (isAllStrings(character.plugins)) {
