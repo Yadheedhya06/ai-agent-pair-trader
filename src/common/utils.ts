@@ -6,6 +6,14 @@ import {
   FundingRateResponse
 } from './types';
 import { AxiosError } from 'axios'
+import {
+  AgentRuntime,
+  elizaLogger,
+  generateText,
+  type Character,
+  stringToUuid,
+  type IDatabaseAdapter,
+} from "@ai16z/eliza";
 
 export class ApiError extends Error {
   constructor(
@@ -106,5 +114,65 @@ export function generateAssetPromptConfig(
   };
 }
 
+export const minimalDatabaseAdapter: IDatabaseAdapter = {
+  db: null,
+  init: async () => {},
+  close: async () => {},
+  getAccountById: async () => null,
+  createAccount: async () => true,
+  getMemories: async () => [],
+  getMemoryById: async () => null,
+  getMemoriesByRoomIds: async () => [],
+  getCachedEmbeddings: async () => [],
+  searchMemories: async () => [],
+  searchMemoriesByEmbedding: async () => [],
+  createMemory: async () => {},
+  removeMemory: async () => {},
+  removeAllMemories: async () => {},
+  countMemories: async () => 0,
+  log: async () => {},
+  getActorDetails: async () => [],
+  updateGoalStatus: async () => {},
+  getGoals: async () => [],
+  updateGoal: async () => {},
+  createGoal: async () => {},
+  removeGoal: async () => {},
+  removeAllGoals: async () => {},
 
+  getRoom: async () =>
+    stringToUuid(
+      "mock-room-id",
+    ) as `${string}-${string}-${string}-${string}-${string}`,
+  createRoom: async () =>
+    stringToUuid(
+      "mock-room-id",
+    ) as `${string}-${string}-${string}-${string}-${string}`,
+  removeRoom: async () => {},
+  getRoomsForParticipant: async () => [],
+  getRoomsForParticipants: async () => [],
+  addParticipant: async () => true,
+  removeParticipant: async () => true,
+  getParticipantsForAccount: async () => [],
+  getParticipantsForRoom: async () => [],
+  getParticipantUserState: async () => "FOLLOWED",
+  setParticipantUserState: async () => {},
+  createRelationship: async () => true,
+  getRelationship: async () => null,
+  getRelationships: async () => [],
+};
+
+export class CompatibleCacheAdapter {
+  private data = new Map<string, string>();
+
+  async get<T = unknown>(key: string): Promise<T | undefined> {
+    const value = this.data.get(key);
+    return (value ? JSON.parse(value) : undefined) as T;
+  }
+  async set<T>(key: string, value: T): Promise<void> {
+    this.data.set(key, JSON.stringify(value));
+  }
+  async delete(key: string): Promise<void> {
+    this.data.delete(key);
+  }
+}
 //TODO : Write format code for api calls

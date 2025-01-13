@@ -5,7 +5,7 @@ import { FullFundingRateResponse, FundingRateSchema, FundingRateResponse } from 
 dotenv.config();
 
 export async function getFundingRate(symbol: string): Promise<FundingRateResponse>  {
-  const API_KEY = process.env.COINGLASS_API_KEY;
+  const API_KEY = process.env.COINGLASS_API_KEY
   
   if (!API_KEY) {
     throw new Error('COINGLASS_API_KEY not found in environment variables');
