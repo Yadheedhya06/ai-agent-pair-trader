@@ -26,6 +26,7 @@ export const MarketDataSchema = z.object({
   max_supply: z.number().nullable(),
   total_supply: z.number().nullable(),
 });
+export type MarketData = z.infer<typeof MarketDataSchema>;
 
 export const TickerSchema = z.object({
   base: z.string(),
@@ -43,6 +44,8 @@ export const TickerSchema = z.object({
   }),
   trust_score: z.union([z.string(), z.null()]),
 });
+
+export type Ticker = z.infer<typeof TickerSchema>;
 
 export const CoinSchema = z.object({
   name: z.string(),
@@ -99,3 +102,14 @@ export const PromptAssetMetricsSchema = z.object({
   });
   
   export type PromptAssetMetrics = z.infer<typeof PromptAssetMetricsSchema>; 
+
+export const DiscordResponseSchema = z.object({
+  related: z.string(),
+  long: z.string(),
+  short: z.string(),
+  pearsonCorrelation: z.number(),
+  standardDeviation: z.number(),
+  remarks: z.string()
+});
+
+export type DiscordResponse = z.infer<typeof DiscordResponseSchema>;

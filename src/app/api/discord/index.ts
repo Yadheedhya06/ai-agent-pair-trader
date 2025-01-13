@@ -3,12 +3,14 @@ import { CorrelationStrength, CorrelationResult } from "../../../../public/types
 import { finalEnums } from "../../../../public/assets/data/finalEnums";
 import { getCoinDataById } from "@/modules/coingecko/getCoinDataById";
 import { getFundingRate } from "@/modules/coinglass/getFundingRate";
-import { TickerSchema, MarketDataSchema, PromptAssetMetrics } from "@/common/types";
+import { TickerSchema, MarketDataSchema, PromptAssetMetrics, DiscordResponse } from "@/common/types";
 import { promptTemplate } from "@/common/prompt";
 import { minimalDatabaseAdapter } from "@/index";
 import { AgentRuntime, stringToUuid,generateText } from "@ai16z/eliza";
 import { loadCharacters } from "@/scripts/loader";
 import { CompatibleCacheAdapter } from "@/index";
+import { generateAssetPromptConfig } from "@/common/utils";
+import { sendMessage } from "@/modules/clients/discord/sendAlert";
 
 async function main() {
 
@@ -84,53 +86,9 @@ async function main() {
     getFundingRate(pair.asset2)
   ]);  
 
-  const promptConfigAsset1: PromptAssetMetrics = {
-    instrumentId: pair.asset1,
-    currentPrice: asset1MarketData.market_data.current_price.usd ?? 'Not Available',
-    marketCap: asset1MarketData.market_data.market_cap.usd ?? 'Not Available',
-    fullyDilutedValuation: asset1MarketData.market_data.fully_diluted_valuation?.usd ?? 'Not Available',
-    fdvRatio: asset1MarketData.market_data.market_cap_fdv_ratio ?? 'Not Available',
-    volume: asset1MarketData.market_data.total_volume.usd ?? 'Not Available',
-    high24h: asset1MarketData.market_data.high_24h.usd ?? 'Not Available',
-    low24h: asset1MarketData.market_data.low_24h.usd ?? 'Not Available',
-    priceChange24h: asset1MarketData.market_data.price_change_24h ?? 'Not Available',
-    circulatingSupply: asset1MarketData.market_data.circulating_supply ?? 'Not Available',
-    maxSupply: asset1MarketData.market_data.max_supply ?? 'Not Available',
-    totalSupply: asset1MarketData.market_data.total_supply ?? 'Not Available',
-    lastPrice: asset1TickerData[0]?.last ?? 'Not Available',
-    tradingVolume: asset1TickerData[0]?.volume ?? 'Not Available',
-    convertedLast: asset1TickerData[0]?.converted_last.usd ?? 'Not Available',
-    contractVolume: asset1TickerData[0]?.converted_volume.usd ?? 'Not Available',
-    trustScore: asset1TickerData[0]?.trust_score === 'yellow' ? 0.5 : 1,
-    currentFunding: fundingRateAsset1.data[0]?.c ?? 'Not Available',
-    FundingChange: fundingRateAsset1.data[0] ? (Number(fundingRateAsset1.data[0].c) - Number(fundingRateAsset1.data[0].o)).toString() : 'Not Available',
-    HighFunding: fundingRateAsset1.data[0]?.h ?? 'Not Available',
-    lowFunding: fundingRateAsset1.data[0]?.l ?? 'Not Available'
-  }
+  const promptConfigAsset1: PromptAssetMetrics = generateAssetPromptConfig(pair.asset1, asset1MarketData.market_data, asset1TickerData, fundingRateAsset1)
 
-  const promptConfigAsset2: PromptAssetMetrics = {
-    instrumentId: pair.asset2,
-    currentPrice: asset2MarketData.market_data.current_price.usd ?? 'Not Available',
-    marketCap: asset2MarketData.market_data.market_cap.usd ?? 'Not Available',
-    fullyDilutedValuation: asset2MarketData.market_data.fully_diluted_valuation?.usd ?? 'Not Available',
-    fdvRatio: asset2MarketData.market_data.market_cap_fdv_ratio ?? 'Not Available',
-    volume: asset2MarketData.market_data.total_volume.usd ?? 'Not Available',
-    high24h: asset2MarketData.market_data.high_24h.usd ?? 'Not Available',
-    low24h: asset2MarketData.market_data.low_24h.usd ?? 'Not Available',
-    priceChange24h: asset2MarketData.market_data.price_change_24h ?? 'Not Available',
-    circulatingSupply: asset2MarketData.market_data.circulating_supply ?? 'Not Available',
-    maxSupply: asset2MarketData.market_data.max_supply ?? 'Not Available',
-    totalSupply: asset2MarketData.market_data.total_supply ?? 'Not Available',
-    lastPrice: asset2TickerData[0]?.last ?? 'Not Available',
-    tradingVolume: asset2TickerData[0]?.volume ?? 'Not Available',
-    convertedLast: asset2TickerData[0]?.converted_last.usd ?? 'Not Available',
-    contractVolume: asset2TickerData[0]?.converted_volume.usd ?? 'Not Available',
-    trustScore: asset2TickerData[0]?.trust_score === 'yellow' ? 0.5 : 1,
-    currentFunding: fundingRateAsset2.data[0]?.c ?? 'Not Available',
-    FundingChange: fundingRateAsset2.data[0] ? (Number(fundingRateAsset2.data[0].c) - Number(fundingRateAsset2.data[0].o)).toString() : 'Not Available',
-    HighFunding: fundingRateAsset2.data[0]?.h ?? 'Not Available',
-    lowFunding: fundingRateAsset2.data[0]?.l ?? 'Not Available'
-  }
+  const promptConfigAsset2: PromptAssetMetrics = generateAssetPromptConfig(pair.asset2, asset2MarketData.market_data, asset2TickerData, fundingRateAsset2)
 
   const promptConfigCorrelation:CorrelationResult = {
     pearsonCorrelation: pair.pearsonCorrelation,
@@ -173,11 +131,13 @@ async function main() {
     };
   };
 
-  const parsedResponse = {
+  const parsedResponse: DiscordResponse = {
     ...parseModelResponse(response),
     related: `${pair.correlationStrength}ly`
   };
   console.log('Parsed response:', parsedResponse);
+  await sendMessage(parsedResponse)
+  process.exit(0);
 }
 
 main().catch(console.error);
