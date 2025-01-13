@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background: black;
+    margin: 0;
+    padding: 0;
+}
+
+/* Optional: Add a custom font if you want to match exactly */
+@font-face {
+    font-family: 'Impact';
+    src: local('Impact');
+}
