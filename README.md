@@ -19,6 +19,8 @@ Directory structure:
     ├── next.config.mjs
     ├── package.json
     ├── pnpm-lock.yaml
+    ├── postcss.config.js
+    ├── tailwind.config.js
     ├── tsconfig.json
     ├── vercel.json
     ├── .env.example
@@ -57,6 +59,9 @@ Directory structure:
     │       └── utils.ts
     ├── src/
     │   ├── app/
+    │   │   ├── globals.css
+    │   │   ├── layout.tsx
+    │   │   ├── page.tsx
     │   │   └── api/
     │   │       └── cron/
     │   │           ├── discord/
