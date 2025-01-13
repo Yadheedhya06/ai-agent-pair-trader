@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server'
 import { ApplicationDatabase } from "@/scripts/db/appDB";
-import { CorrelationStrength, CorrelationResult } from "../../../../public/types/correlation";
-import { finalEnums } from "../../../../public/assets/data/finalEnums";
+import { CorrelationStrength, CorrelationResult } from "../../../../../public/types/correlation";
+import { finalEnums } from "../../../../../public/assets/data/finalEnums";
 import { getCoinDataById } from "@/modules/coingecko/getCoinDataById";
 import { getFundingRate } from "@/modules/coinglass/getFundingRate";
 import { TickerSchema, MarketDataSchema, PromptAssetMetrics, DiscordResponse } from "@/common/types";
@@ -12,7 +12,7 @@ import { loadCharacters } from "@/scripts/loader";
 import { CompatibleCacheAdapter } from "@/index";
 import { generateAssetPromptConfig } from "@/common/utils";
 import { sendMessage } from "@/modules/clients/discord/sendAlert";
-import { cronRunner } from "../cron/modules/cron-runner";
+import { cronRunner } from "../modules/cron-runner";
 
 export const GET = async (request: NextRequest) =>
   cronRunner(request, alertDiscord)
