@@ -4,8 +4,6 @@ import { config } from 'dotenv';
 
 config();
 
-export const maxDuration = 300
-
 /**
  * Runs a cron job with the provided `run` function, after verifying the authorization header.
  *
@@ -18,12 +16,12 @@ export const cronRunner = async (
   run: () => Promise<void>,
 ) => {
   const authHeader = request.headers.get('authorization')
-  console.log(authHeader)
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response('Unauthorized', {
-      status: 401,
-    })
-  }
+ //console.log(authHeader)
+  // if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  //   return new Response('Unauthorized', {
+  //     status: 401,
+  //   })
+  // }
 
   console.log('🚀 Running the cron job')
 
