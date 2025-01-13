@@ -16,7 +16,7 @@ import { cronRunner } from "../cron/modules/cron-runner";
 export const GET = async (request: NextRequest) =>
   cronRunner(request, alertDiscord)
 
-async function alertDiscord() {
+export async function alertDiscord() {
   console.log('🏁 Starting Agent')
   const correlationStrengths = [
     CorrelationStrength.VERY_STRONG, 
