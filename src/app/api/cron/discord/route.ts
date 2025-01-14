@@ -150,10 +150,15 @@ async function alertDiscord() {
     category: pair.category
   };
   console.log('Parsed response:', parsedResponse);
-  await sendMessage(parsedResponse)
+  
+  console.log('Sending message to Discord...')
+  try {
+    await sendMessage(parsedResponse)
+  } catch (discordError) {
+    console.error('Discord message sending failed:', discordError)
+  }
 
   console.log(
-    '🏁 Completed Agent run',
-    JSON.stringify(parseModelResponse, null, 2),
+    '🏁 Completed Agent run'
   )
 }
