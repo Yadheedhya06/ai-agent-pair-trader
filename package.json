@@ -19,6 +19,7 @@
     "check:unlockids": "bun run ./public/assets/lib/checkCoinIdsinTokenomist.ts",
     "fetch:unlockslist": "bun run ./public/scripts/getTokenUnlockList.ts",
     "finalEnums": "bun run ./public/scripts/mapPairsAndCoins.ts",
+    "getunlock": "bun run ./src/modules/tokenomist/tokenUnlocks.ts",
     "insert:coins": "tsx ./public/scripts/upsertCoinsToDb.ts",
     "insert:pairs": "tsx ./public/scripts/upsertPairsToDb.ts",
     "test:agent": "tsx ./src/app/api/discord/index.ts",

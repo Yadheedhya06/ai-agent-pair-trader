@@ -7,13 +7,10 @@ import {
 } from './types';
 import { AxiosError } from 'axios'
 import {
-  AgentRuntime,
-  elizaLogger,
-  generateText,
-  type Character,
   stringToUuid,
   type IDatabaseAdapter,
 } from "@ai16z/eliza";
+import { UnlockEvent } from "../../public/types/tokenomist";
 
 export class ApiError extends Error {
   constructor(
@@ -85,7 +82,8 @@ export function generateAssetPromptConfig(
   instrumentId: string,
   marketData: MarketData,
   tickerData: Ticker[],
-  fundingRate: FundingRateResponse
+  fundingRate: FundingRateResponse,
+  tokenUnlock:  UnlockEvent[] | null,
 ): PromptAssetMetrics {
   return {
     instrumentId,
@@ -110,7 +108,8 @@ export function generateAssetPromptConfig(
       ? (Number(fundingRate.data[0].c) - Number(fundingRate.data[0].o)).toString() 
       : 'Not Available',
     HighFunding: fundingRate.data[0]?.h ?? 'Not Available',
-    lowFunding: fundingRate.data[0]?.l ?? 'Not Available'
+    lowFunding: fundingRate.data[0]?.l ?? 'Not Available',
+    tokenUnlock: tokenUnlock
   };
 }
 

@@ -26,3 +26,44 @@ export const TokenDataSchema = z.object({
 
 export type TokenResponse = z.infer<typeof TokenResponseSchema>;
 export type TokenData = z.infer<typeof TokenDataSchema>;
+
+export const AllocationBreakdownSchema = z.object({
+  unlockDate: z.string(),
+  allocationName: z.string(),
+  standardAllocationName: z.string(),
+  cliffAmount: z.number(),
+  cliffValue: z.number(),
+  referencePrice: z.number(),
+  referencePriceUpdatedTime: z.string(),
+  unlockPrecision: z.string()
+});
+
+export const CliffUnlocksSchema = z.object({
+  cliffAmount: z.number(),
+  cliffValue: z.number(), 
+  referencePrice: z.number(),
+  referencePriceUpdatedTime: z.string(),
+  valueToMarketCap: z.number(),
+  allocationBreakdown: z.array(AllocationBreakdownSchema)
+});
+
+export const UnlockEventSchema = z.object({
+  unlockDate: z.string(),
+  tokenName: z.string(),
+  tokenSymbol: z.string(),
+  dataSource: z.string(),
+  linearUnlocks: z.null().or(z.any()),
+  cliffUnlocks: CliffUnlocksSchema,
+  latestUpdateDate: z.string()
+});
+
+export type UnlockEvent = z.infer<typeof UnlockEventSchema>;
+export const UnlocksResponseSchema = z.object({
+  metadata: z.object({
+    queryDate: z.string()
+  }),
+  status: z.boolean(),
+  data: z.array(UnlockEventSchema).nullable()
+});
+
+export type UnlocksResponse = z.infer<typeof UnlocksResponseSchema>;

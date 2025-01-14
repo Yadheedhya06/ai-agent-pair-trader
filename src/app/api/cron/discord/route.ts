@@ -11,6 +11,7 @@ import { AgentRuntime, stringToUuid,generateText } from "@ai16z/eliza";
 import { loadCharacters } from "@/scripts/loader";
 import { generateAssetPromptConfig } from "@/common/utils";
 import { sendMessage } from "@/modules/clients/discord/sendAlert";
+import { getTokenUnlocks } from '@/modules/tokenomist/tokenUnlocks';
 import { cronRunner } from "../modules/cron-runner";
 
 export const GET = async (request: NextRequest) =>
@@ -90,9 +91,13 @@ async function alertDiscord() {
     getFundingRate(pair.asset2)
   ]);  
 
-  const promptConfigAsset1: PromptAssetMetrics = generateAssetPromptConfig(pair.asset1, asset1MarketData.market_data, asset1TickerData, fundingRateAsset1)
+  const [tokenUnlockAsset1, tokenUnlockAsset2] = await Promise.all([
+    getTokenUnlocks(asset1CoinId),
+    getTokenUnlocks(asset2CoinId)
+  ])
+  const promptConfigAsset1: PromptAssetMetrics = generateAssetPromptConfig(pair.asset1, asset1MarketData.market_data, asset1TickerData, fundingRateAsset1, tokenUnlockAsset1)
 
-  const promptConfigAsset2: PromptAssetMetrics = generateAssetPromptConfig(pair.asset2, asset2MarketData.market_data, asset2TickerData, fundingRateAsset2)
+  const promptConfigAsset2: PromptAssetMetrics = generateAssetPromptConfig(pair.asset2, asset2MarketData.market_data, asset2TickerData, fundingRateAsset2, tokenUnlockAsset2)
 
   const promptConfigCorrelation:CorrelationResult = {
     pearsonCorrelation: pair.pearsonCorrelation,

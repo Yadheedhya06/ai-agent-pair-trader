@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { UnlockEventSchema } from "../../public/types/tokenomist";
 
 export const MarketDataSchema = z.object({
   current_price: z.object({
@@ -98,7 +99,8 @@ export const PromptAssetMetricsSchema = z.object({
     currentFunding: z.union([z.number(), z.string()]),
     FundingChange: z.union([z.number(), z.string()]),
     HighFunding: z.union([z.number(), z.string()]),
-    lowFunding: z.union([z.number(), z.string()])
+    lowFunding: z.union([z.number(), z.string()]),
+    tokenUnlock: z.array(UnlockEventSchema).nullable()
   });
   
   export type PromptAssetMetrics = z.infer<typeof PromptAssetMetricsSchema>; 
