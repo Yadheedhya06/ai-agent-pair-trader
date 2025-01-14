@@ -11,6 +11,7 @@ import { AgentRuntime, stringToUuid,generateText } from "@ai16z/eliza";
 import { loadCharacters } from "@/scripts/loader";
 import { generateAssetPromptConfig } from "@/common/utils";
 import { sendMessage } from "@/modules/clients/discord/sendAlert";
+import { getTokenUnlocks } from '@/modules/tokenomist/tokenUnlocks';
 import { cronRunner } from "../modules/cron-runner";
 
 export const GET = async (request: NextRequest) =>
@@ -19,12 +20,14 @@ export const GET = async (request: NextRequest) =>
 async function alertDiscord() {
   console.log('🏁 Starting Agent')
   const correlationStrengths = [
-    CorrelationStrength.VERY_STRONG, 
     CorrelationStrength.STRONG,
+    CorrelationStrength.STRONG,
+    CorrelationStrength.STRONG,
+    CorrelationStrength.VERY_STRONG,
+    CorrelationStrength.VERY_STRONG, 
     CorrelationStrength.MODERATE
   ];
   const randomStrength = correlationStrengths[Math.floor(Math.random() * correlationStrengths.length)];
-  
   const db = new ApplicationDatabase()
   const pair = await db.getRandomCorrelationByCategory(randomStrength)
   console.log(pair)
@@ -90,9 +93,13 @@ async function alertDiscord() {
     getFundingRate(pair.asset2)
   ]);  
 
-  const promptConfigAsset1: PromptAssetMetrics = generateAssetPromptConfig(pair.asset1, asset1MarketData.market_data, asset1TickerData, fundingRateAsset1)
+  const [tokenUnlockAsset1, tokenUnlockAsset2] = await Promise.all([
+    getTokenUnlocks(asset1CoinId),
+    getTokenUnlocks(asset2CoinId)
+  ])
+  const promptConfigAsset1: PromptAssetMetrics = generateAssetPromptConfig(pair.asset1, asset1MarketData.market_data, asset1TickerData, fundingRateAsset1, tokenUnlockAsset1)
 
-  const promptConfigAsset2: PromptAssetMetrics = generateAssetPromptConfig(pair.asset2, asset2MarketData.market_data, asset2TickerData, fundingRateAsset2)
+  const promptConfigAsset2: PromptAssetMetrics = generateAssetPromptConfig(pair.asset2, asset2MarketData.market_data, asset2TickerData, fundingRateAsset2, tokenUnlockAsset2)
 
   const promptConfigCorrelation:CorrelationResult = {
     pearsonCorrelation: pair.pearsonCorrelation,
@@ -117,12 +124,14 @@ async function alertDiscord() {
     cacheManager: new CompatibleCacheAdapter(),
     logging: true,
   });
-
+  
   const response = await generateText({
     runtime,
     context: finalPrompt,
     modelClass: "medium"
   })
+
+  console.log(response)
 
   const parseModelResponse = (response: string) => {
     const lines = response.split('\n');
@@ -137,7 +146,8 @@ async function alertDiscord() {
 
   const parsedResponse: DiscordResponse = {
     ...parseModelResponse(response),
-    related: `${pair.correlationStrength}ly`
+    related: `${pair.correlationStrength}ly`,
+    category: pair.category
   };
   console.log('Parsed response:', parsedResponse);
   await sendMessage(parsedResponse)
