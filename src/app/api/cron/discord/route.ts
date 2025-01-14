@@ -20,12 +20,14 @@ export const GET = async (request: NextRequest) =>
 async function alertDiscord() {
   console.log('🏁 Starting Agent')
   const correlationStrengths = [
-    CorrelationStrength.VERY_STRONG, 
     CorrelationStrength.STRONG,
+    CorrelationStrength.STRONG,
+    CorrelationStrength.STRONG,
+    CorrelationStrength.VERY_STRONG,
+    CorrelationStrength.VERY_STRONG, 
     CorrelationStrength.MODERATE
   ];
   const randomStrength = correlationStrengths[Math.floor(Math.random() * correlationStrengths.length)];
-  
   const db = new ApplicationDatabase()
   const pair = await db.getRandomCorrelationByCategory(randomStrength)
   console.log(pair)
