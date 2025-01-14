@@ -8,8 +8,116 @@ body {
     padding: 0;
 }
 
-/* Optional: Add a custom font if you want to match exactly */
 @font-face {
     font-family: 'Impact';
     src: local('Impact');
+}
+
+.trigger-button {
+    top: 1rem;
+    right: 1rem;
+    z-index: 50;
+}
+
+
+.trigger-button-container {
+    position: fixed;
+    top: 1.5rem;
+    right: 2.5rem;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.loading-dots {
+    position: relative;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.success-checkmark {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.loading-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #4B5563;
+    animation: dotAnimation 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: -0.24s;
+}
+
+.loading-dots span:nth-child(3) {
+    animation-delay: -0.16s;
+}
+
+.loading-dots span:nth-child(4) {
+    animation-delay: -0.08s;
+}
+
+@keyframes dotAnimation {
+
+    0%,
+    80%,
+    100% {
+        background-color: #4B5563;
+    }
+
+    40% {
+        background-color: #9CA3AF;
+    }
+}
+
+.success-checkmark {
+    display: flex;
+    align-items: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.success-checkmark {
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
