@@ -8,12 +8,13 @@ function getMainHeading(asset1: PromptAssetMetrics, asset2: PromptAssetMetrics):
 }
 
 function getExamples(): string {
-  return `Example: 
-    "Long : BTCUSDT\nShort : ETHUSDT\nPearson Correlation: 0.8\nStandard Deviation: 0.23\nRemarks: Strong correlation indicates mean reversion potential. BTC shows higher market cap, lower volatility and positive funding rates. ETH has upcoming token unlocks of 2.3M tokens valued at $4.2B (3.2% of mcap) suggesting selling pressure.",
-    "Long : PERPUSDT\nShort : HFTUSDT\nPearson Correlation: 0.75\nStandard Deviation: 0.31\nRemarks: PERP exhibits 2x higher trading volume, positive funding rate change of 0.01% and stronger market depth on Binance. HFT shows declining volume with negative funding rates and lower trust score.",
-    "Long : LINKUSDT\nShort : ATOMUSDT\nPearson Correlation: 0.83\nStandard Deviation: 0.28\nRemarks: LINK demonstrates bullish momentum with 15% 24h gains, increasing funding rates from 0.01% to 0.03%. ATOM faces bearish pressure with major token unlock of 25M tokens (8% of mcap) in next 30 days and declining Binance volume.",
-    "Long : SOLUSDT\nShort : AVAXUSDT\nPearson Correlation: 0.79\nStandard Deviation: 0.25\nRemarks: SOL shows strong fundamentals with 30% higher market cap, increasing funding rates and 2x Binance volume. AVAX exhibits bearish divergence with negative price momentum, upcoming unlock events and lower trust score.",
-    "Long : MATICUSDT\nShort : FTMUSDT\nPearson Correlation: 0.77\nStandard Deviation: 0.27\nRemarks: MATIC demonstrates relative strength with positive funding rate change of 0.02%, higher Binance liquidity and no imminent unlocks. FTM faces selling pressure from 50M token unlock (4.5% of mcap) and declining market metrics."`;
+  return `\nGive Output in FORMAT: (THESE ARE JUST FOR EXAMPLES TO TELL YOU FORMAT)\n
+  Only mention base assets in response dont give quote asset or whole trade name\n
+    "Long : BTC\nShort : ETH\nPearson Correlation: 0.8\nStandard Deviation: 0.23\nRemarks: Strong correlation indicates mean reversion potential. BTC shows higher market cap, lower volatility and positive funding rates. ETH has upcoming token unlocks of 2.3M tokens valued at $4.2B (3.2% of mcap) suggesting selling pressure."\n\n
+    "Long : PERP\nShort : HFT\nPearson Correlation: 0.75\nStandard Deviation: 0.31\nRemarks: PERP exhibits 2x higher trading volume, positive funding rate change of 0.01% and stronger market depth on Binance. HFT shows declining volume with negative funding rates and lower trust score."\n\n
+    "Long : LINK\nShort : ATOM\nPearson Correlation: 0.83\nStandard Deviation: 0.28\nRemarks: LINK demonstrates bullish momentum with 15% 24h gains, increasing funding rates from 0.01% to 0.03%. ATOM faces bearish pressure with major token unlock of 25M tokens (8% of mcap) in next 30 days and declining Binance volume."\n\n
+    "Long : SOL\nShort : AVAX\nPearson Correlation: 0.79\nStandard Deviation: 0.25\nRemarks: SOL shows strong fundamentals with 30% higher market cap, increasing funding rates and 2x Binance volume. AVAX exhibits bearish divergence with negative price momentum, upcoming unlock events and lower trust score."\n\n
+    "Long : MATIC\nShort : FTM\nPearson Correlation: 0.77\nStandard Deviation: 0.27\nRemarks: MATIC demonstrates relative strength with positive funding rate change of 0.02%, higher Binance liquidity and no imminent unlocks. FTM faces selling pressure from 50M token unlock (4.5% of mcap) and declining market metrics."\n\n`;
 }
 
 function getCorrelationStats(correlations: CorrelationResult): string {
@@ -38,7 +39,7 @@ function getMarketStats(asset: PromptAssetMetrics): string {
   if (asset.maxSupply) stats.push(`- Max Supply: ${asset.maxSupply}`);
   if (asset.totalSupply) stats.push(`- Total Supply: ${asset.totalSupply}`);
 
-  return stats.length ? `Market Stats:\n${stats.join('\n')}` : '';
+  return stats.length ? `Market Stats for ${asset.instrumentId}:\n${stats.join('\n')}` : '';
 }
 
 function getBinanceStats(asset: PromptAssetMetrics): string {
@@ -50,7 +51,7 @@ function getBinanceStats(asset: PromptAssetMetrics): string {
   if (asset.contractVolume) stats.push(`- Last Converted Volume: ${asset.contractVolume}`);
   if (asset.trustScore) stats.push(`- Trust Score: ${asset.trustScore}`);
 
-  return stats.length ? `Binance Stats:\n${stats.join('\n')}` : '';
+  return stats.length ? `Binance Stats for ${asset.instrumentId}:\n${stats.join('\n')}` : '';
 }
 
 function getFundingRates(asset: PromptAssetMetrics): string {
@@ -61,7 +62,7 @@ function getFundingRates(asset: PromptAssetMetrics): string {
   if (asset.HighFunding) rates.push(`- High funding rate: ${asset.HighFunding}`);
   if (asset.lowFunding) rates.push(`- Low funding Rate: ${asset.lowFunding}`);
 
-  return rates.length ? `Funding Rates (from Coinglass):\n${rates.join('\n')}` : '';
+  return rates.length ? `Funding Rates (from Coinglass)for ${asset.instrumentId}:\n${rates.join('\n')}` : '';
 }
 
 
@@ -78,11 +79,11 @@ function getTokenUnlocks(asset: PromptAssetMetrics): string {
     return details.join('\n');
   });
 
-  return `Token Unlocks:\n${unlocks.join('\n\n')}`;
+  return `Token Unlocks for ${asset.instrumentId}:\n${unlocks.join('\n\n')}`;
 }
 
 function getAssetSection(asset: PromptAssetMetrics, assetNumber: number): string {
-  const sections: string[] = [`Asset ${assetNumber}: ${asset.instrumentId}`];
+  const sections: string[] = [`==========\nAsset ${assetNumber}: ${asset.instrumentId}`];
 
   const marketStats = getMarketStats(asset);
   const binanceStats = getBinanceStats(asset);
@@ -94,6 +95,8 @@ function getAssetSection(asset: PromptAssetMetrics, assetNumber: number): string
   if (fundingRates) sections.push(fundingRates);
   if (tokenUnlocks) sections.push(tokenUnlocks);
 
+  sections.push("==========");
+
   return sections.join('\n\n');
 }
 
@@ -104,8 +107,8 @@ export function promptTemplate(
 ): string {
   const sections = [
     getMainHeading(asset1, asset2),
-    getExamples(),
     getCorrelationStats(correlations),
+    getExamples(),
     getAssetSection(asset1, 1),
     getAssetSection(asset2, 2),
     `Based on the above metrics, please provide decision:

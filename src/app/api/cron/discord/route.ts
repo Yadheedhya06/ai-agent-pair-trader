@@ -17,7 +17,7 @@ import { cronRunner } from "../modules/cron-runner";
 export const GET = async (request: NextRequest) =>
   cronRunner(request, alertDiscord)
 
-async function alertDiscord() {
+export async function alertDiscord() {
   console.log('🏁 Starting Agent')
   const correlationStrengths = [
     CorrelationStrength.VERY_STRONG, 
@@ -122,12 +122,14 @@ async function alertDiscord() {
     cacheManager: new CompatibleCacheAdapter(),
     logging: true,
   });
-
+  
   const response = await generateText({
     runtime,
     context: finalPrompt,
     modelClass: "medium"
   })
+
+  console.log(response)
 
   const parseModelResponse = (response: string) => {
     const lines = response.split('\n');
@@ -142,7 +144,8 @@ async function alertDiscord() {
 
   const parsedResponse: DiscordResponse = {
     ...parseModelResponse(response),
-    related: `${pair.correlationStrength}ly`
+    related: `${pair.correlationStrength}ly`,
+    category: pair.category
   };
   console.log('Parsed response:', parsedResponse);
   await sendMessage(parsedResponse)

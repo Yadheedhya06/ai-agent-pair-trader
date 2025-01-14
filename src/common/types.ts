@@ -109,6 +109,7 @@ export const DiscordResponseSchema = z.object({
   related: z.string(),
   long: z.string(),
   short: z.string(),
+  category: z.string(),
   pearsonCorrelation: z.number(),
   standardDeviation: z.number(),
   remarks: z.string()

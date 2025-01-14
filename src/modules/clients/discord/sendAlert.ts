@@ -22,6 +22,7 @@ async function sendTradeAlert({
   pearsonCorrelation,
   standardDeviation,
   remarks,
+  category,
   color = '#43B581'
 }: {
   title: string;
@@ -31,6 +32,7 @@ async function sendTradeAlert({
   pearsonCorrelation: string;
   standardDeviation: string;
   remarks: string;
+  category: string;
   color?: string;
 }) {
   try {
@@ -42,14 +44,15 @@ async function sendTradeAlert({
     const embed = new EmbedBuilder()
     .setColor(color as any)
     .setTitle(title)
-    .setDescription(
-        `**📈 Long:** ${longPosition}\n\n` +
-        `**📉 Short:** ${shortPosition}\n\n` +
-        `**✅ Related:** ${related}\n\n` +
-        `**📊 Pearson Correlation:** ${pearsonCorrelation}\n\n` +
-        `**📏 Standard Deviation:** ${standardDeviation}\n\n` +
+    .setDescription([
+        `**📈 Long:** ${longPosition}`,
+        `**📉 Short:** ${shortPosition}`,
+        `**✅ Related:** ${related}`,
+        category !== 'other' ? `**🏷️ Category:** ${category.charAt(0).toUpperCase() + category.slice(1)}` : '',
+        `**📊 Pearson Correlation:** ${pearsonCorrelation}`,
+        `**📏 Standard Deviation:** ${standardDeviation}`,
         `**✨ Remarks:** ${remarks}`
-    )
+    ].filter(Boolean).join('\n\n'))
     .setTimestamp();
 
     await channel.send({ embeds: [embed] });
@@ -60,6 +63,11 @@ async function sendTradeAlert({
 }
 
 export async function sendMessage(tradeData: DiscordResponse) {
+  const category = tradeData.category
+    .replace(/\bother\s*x\s*/gi, '')
+    .replace(/\s*x\s*other\b/gi, '')
+    .trim();
+
   await sendTradeAlert({
     title: '🟢 Pair Trade Alert 🟢',
     longPosition: tradeData.long,
@@ -68,6 +76,7 @@ export async function sendMessage(tradeData: DiscordResponse) {
     pearsonCorrelation: tradeData.pearsonCorrelation.toString(),
     standardDeviation: tradeData.standardDeviation.toString(),
     remarks: tradeData.remarks,
+    category: category,
     color: '#43B581'
   });
   console.log('✅ Successfully sent discord alert!');
