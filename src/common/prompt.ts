@@ -1,92 +1,117 @@
 import { PromptAssetMetrics } from "./types";
 import { CorrelationResult } from "../../public/types/correlation";
 
-export function promptTemplate(asset1: PromptAssetMetrics, asset2: PromptAssetMetrics, correlations: CorrelationResult): string {
-    return `
-  You are deciding positions two perpetual contract assets on Binance for Pair Trading: ${asset1.instrumentId} and ${asset2.instrumentId}
-  Based on below Stats, Market data, Binance data and Funding Rate of both Assets you have to tell me which Asset suited for Long and which Asset suited for Short in pair trading.
-  Give Pearson Correlation and Standard deviation available from stats given to you
-  Write Short Remark on what you analysed
-  You do not give explanation directly give one line telling which is long position which is short position, Pearson Correlation, Standard Deviation and Remarks
-  Example: 
+function getMainHeading(asset1: PromptAssetMetrics, asset2: PromptAssetMetrics): string {
+  return `You are deciding positions two perpetual contract assets on Binance for Pair Trading: ${asset1.instrumentId} and ${asset2.instrumentId}
+  Based on below Stats, Market data, Binance data and Funding Rate of both Assets you have to tell me which Asset suited for Long and which Asset suited for Short in pair trading.`;
+}
+
+function getExamples(): string {
+  return `Example: 
     "Long : BTCUSDT\nShort : ETHUSDT\nPearson Correlation: 0.8\nStandard Deviation: 0.23\nRemarks: High correlation suggests potential mean reversion opportunity. BTC showing relative strength vs ETH with lower volatility. Entry at 2 standard deviations from mean spread.",
-    "Long : PERPUSDT\nShort : HFTUSDT\nPearson Correlation: 0.75\nStandard Deviation: 0.31\nRemarks: PERP shows higher trading volume and market cap with positive price momentum. HFT has lower liquidity and declining funding rates.",
-    "Long : SOLUSDT\nShort : AVAXUSDT\nPearson Correlation: 0.85\nStandard Deviation: 0.28\nRemarks: SOL has stronger price action with higher 24h volume and lower FDV ratio. AVAX showing weakness in price and funding rates.",
-    "Long : LINKUSDT\nShort : ATOMUSDT\nPearson Correlation: 0.72\nStandard Deviation: 0.25\nRemarks: LINK demonstrates better market metrics with higher trust score and trading volume. ATOM facing selling pressure with negative funding.",
-    "Long : BNBUSDT\nShort : MATICUSDT\nPearson Correlation: 0.77\nStandard Deviation: 0.21\nRemarks: BNB maintains higher market cap and volume with stable funding rates. MATIC showing declining volume and negative price momentum.",
-    "Long : DOGEUSDT\nShort : SHIBUSDT\nPearson Correlation: 0.91\nStandard Deviation: 0.35\nRemarks: DOGE exhibits stronger market fundamentals with higher trading volume and positive funding rates. SHIB facing increased selling pressure.",
-    "Long : APTUSDT\nShort : FTMUSDT\nPearson Correlation: 0.68\nStandard Deviation: 0.29\nRemarks: APT shows bullish momentum with increasing volume and positive funding. FTM has weaker market metrics and declining price action.",
-    "Long : NEARUSDT\nShort : ONEUSDT\nPearson Correlation: 0.82\nStandard Deviation: 0.27\nRemarks: NEAR demonstrates superior market health with higher volume and stable funding rates. ONE showing weakness in price and volume metrics.",
-    "Long : OPUSDT\nShort : ARBUSDT\nPearson Correlation: 0.88\nStandard Deviation: 0.19\nRemarks: OP has stronger market positioning with higher trading volume and positive funding rates. ARB showing relative weakness in price action."
-  
-  Statistic calculation of Correlations between these two Asset pairs are :
+    "Long : PERPUSDT\nShort : HFTUSDT\nPearson Correlation: 0.75\nStandard Deviation: 0.31\nRemarks: PERP shows higher trading volume and market cap with positive price momentum. HFT has lower liquidity and declining funding rates."`;
+}
+
+function getCorrelationStats(correlations: CorrelationResult): string {
+  return `Statistic calculation of Correlations between these two Asset pairs are:
   - Pearson Correlation: ${correlations.pearsonCorrelation}
   - Standard Deviation: ${correlations.stdDeviation}
-  - Strength: ${correlations.correlationStrength}ly correlated
+  - Strength: ${correlations.correlationStrength}ly correlated`;
+}
 
-===========
-  Asset 1 : ${asset1.instrumentId}
-  Market Stats for Asset 1:
-  - Current Price: $${asset1.currentPrice}
-  - Market Cap: $${asset1.marketCap}
-  - Fully Diluted Valuation: $${asset1.fullyDilutedValuation}
-  - FDV Ratio: ${asset1.fdvRatio}
-  - Total Volume: ${asset1.volume}
-  - 24h High: $${asset1.high24h}
-  - 24h Low: $${asset1.low24h}
-  - 24h Price Change: ${asset1.priceChange24h}%
-  - Circulating Supply: ${asset1.circulatingSupply}
-  - Max Supply: ${asset1.maxSupply}
-  - Total Supply: ${asset1.totalSupply}
-
-  Binance Stats for Asset 1:
-  - Last Price: $${asset1.lastPrice}
-  - 24h Trading Volume: ${asset1.tradingVolume}
-  - Last Converted Price: ${asset1.convertedLast}
-  - Last Converted Volume: ${asset1.contractVolume}
-  - Trust Score: ${asset1.trustScore}
-
-  Funding Rates of Asset 1(from Coinglass):
-  - Current funding rate: ${asset1.currentFunding}
-  - Funding rate change: ${asset1.FundingChange}
-  - High funding rate: ${asset1.HighFunding}
-  - Low funding Rate: ${asset1.lowFunding}
-==========
-
-==========  
-  Asset 2: ${asset2.instrumentId}
-    Market Stats for Asset 1:
-  - Current Price: $${asset2.currentPrice}
-  - Market Cap: $${asset2.marketCap}
-  - Fully Diluted Valuation: $${asset2.fullyDilutedValuation}
-  - FDV Ratio: ${asset2.fdvRatio}
-  - 24h Volume: ${asset2.volume}
-  - 24h High: $${asset2.high24h}
-  - 24h Low: $${asset2.low24h}
-  - 24h Price Change: ${asset2.priceChange24h}%
-  - Circulating Supply: ${asset2.circulatingSupply}
-  - Max Supply: ${asset2.maxSupply}
-  - Total Supply: ${asset2.totalSupply}
-
-  Binance Stats for Asset 2:
-  - Last Price: $${asset2.lastPrice}
-  - 24h Trading Volume: ${asset2.tradingVolume}
-  - Last Converted Price: ${asset2.convertedLast}
-  - Last Converted Volume: ${asset2.contractVolume}
-  - Trust Score: ${asset2.trustScore}
-
-  Funding Rates of Asset 2(from Coinglass):
-  - Current funding rate: ${asset2.currentFunding}
-  - Funding rate change: ${asset2.FundingChange}
-  - High funding rate: ${asset2.HighFunding}
-  - Low funding Rate: ${asset2.lowFunding}
-==========
+function getMarketStats(asset: PromptAssetMetrics): string {
+  const stats: string[] = [];
   
-  Based on the above metrics, please provide decision:
-  1. Which asset is better suited for a long position
-  2. Which asset is better suited for a short position
-  3. Provide reasoning based on:
-        - Market sentiment (e.g., funding rates, token unlocks)
-        - Momentum (e.g., price changes, volume)
-        - Valuation metrics (e.g., market cap/FDV ratio, trust score)`;
-  }
+  if (asset.currentPrice) stats.push(`- Current Price: $${asset.currentPrice}`);
+  if (asset.marketCap) stats.push(`- Market Cap: $${asset.marketCap}`);
+  if (asset.fullyDilutedValuation) stats.push(`- Fully Diluted Valuation: $${asset.fullyDilutedValuation}`);
+  if (asset.fdvRatio) stats.push(`- FDV Ratio: ${asset.fdvRatio}`);
+  if (asset.volume) stats.push(`- Total Volume: ${asset.volume}`);
+  if (asset.high24h) stats.push(`- 24h High: $${asset.high24h}`);
+  if (asset.low24h) stats.push(`- 24h Low: $${asset.low24h}`);
+  if (asset.priceChange24h) stats.push(`- 24h Price Change: ${asset.priceChange24h}%`);
+  if (asset.circulatingSupply) stats.push(`- Circulating Supply: ${asset.circulatingSupply}`);
+  if (asset.maxSupply) stats.push(`- Max Supply: ${asset.maxSupply}`);
+  if (asset.totalSupply) stats.push(`- Total Supply: ${asset.totalSupply}`);
+
+  return stats.length ? `Market Stats:\n${stats.join('\n')}` : '';
+}
+
+function getBinanceStats(asset: PromptAssetMetrics): string {
+  const stats: string[] = [];
+
+  if (asset.lastPrice) stats.push(`- Last Price: $${asset.lastPrice}`);
+  if (asset.tradingVolume) stats.push(`- 24h Trading Volume: ${asset.tradingVolume}`);
+  if (asset.convertedLast) stats.push(`- Last Converted Price: ${asset.convertedLast}`);
+  if (asset.contractVolume) stats.push(`- Last Converted Volume: ${asset.contractVolume}`);
+  if (asset.trustScore) stats.push(`- Trust Score: ${asset.trustScore}`);
+
+  return stats.length ? `Binance Stats:\n${stats.join('\n')}` : '';
+}
+
+function getFundingRates(asset: PromptAssetMetrics): string {
+  const rates: string[] = [];
+
+  if (asset.currentFunding) rates.push(`- Current funding rate: ${asset.currentFunding}`);
+  if (asset.FundingChange) rates.push(`- Funding rate change: ${asset.FundingChange}`);
+  if (asset.HighFunding) rates.push(`- High funding rate: ${asset.HighFunding}`);
+  if (asset.lowFunding) rates.push(`- Low funding Rate: ${asset.lowFunding}`);
+
+  return rates.length ? `Funding Rates (from Coinglass):\n${rates.join('\n')}` : '';
+}
+
+
+function getTokenUnlocks(asset: PromptAssetMetrics): string {
+  if (!asset.tokenUnlock?.length) return '';
+
+  const unlocks = asset.tokenUnlock.map(unlock => {
+    const details: string[] = [];
+    details.push(`- Unlock Date: ${unlock.unlockDate}`);
+    if (unlock.cliffUnlocks) {
+      details.push(`- Cliff Amount: ${unlock.cliffUnlocks.cliffAmount} at valued $${unlock.cliffUnlocks.cliffValue}`);
+      details.push(`- Value to Market Cap: ${unlock.cliffUnlocks.valueToMarketCap}%`);
+    }
+    return details.join('\n');
+  });
+
+  return `Token Unlocks:\n${unlocks.join('\n\n')}`;
+}
+
+function getAssetSection(asset: PromptAssetMetrics, assetNumber: number): string {
+  const sections: string[] = [`Asset ${assetNumber}: ${asset.instrumentId}`];
+
+  const marketStats = getMarketStats(asset);
+  const binanceStats = getBinanceStats(asset);
+  const fundingRates = getFundingRates(asset);
+  const tokenUnlocks = getTokenUnlocks(asset);
+
+  if (marketStats) sections.push(marketStats);
+  if (binanceStats) sections.push(binanceStats);
+  if (fundingRates) sections.push(fundingRates);
+  if (tokenUnlocks) sections.push(tokenUnlocks);
+
+  return sections.join('\n\n');
+}
+
+export function promptTemplate(
+  asset1: PromptAssetMetrics, 
+  asset2: PromptAssetMetrics, 
+  correlations: CorrelationResult
+): string {
+  const sections = [
+    getMainHeading(asset1, asset2),
+    getExamples(),
+    getCorrelationStats(correlations),
+    getAssetSection(asset1, 1),
+    getAssetSection(asset2, 2),
+    `Based on the above metrics, please provide decision:
+    1. Which asset is better suited for a long position
+    2. Which asset is better suited for a short position
+    3. Provide reasoning based on:
+          - Market sentiment (e.g., funding rates, token unlocks)
+          - Momentum (e.g., price changes, volume)
+          - Valuation metrics (e.g., market cap/FDV ratio, trust score)`
+  ];
+
+  return sections.join('\n\n');
+}
