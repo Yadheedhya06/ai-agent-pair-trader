@@ -2,14 +2,18 @@ import { PromptAssetMetrics } from "./types";
 import { CorrelationResult } from "../../public/types/correlation";
 
 function getMainHeading(asset1: PromptAssetMetrics, asset2: PromptAssetMetrics): string {
-  return `You are deciding positions two perpetual contract assets on Binance for Pair Trading: ${asset1.instrumentId} and ${asset2.instrumentId}
+  const now = new Date();
+  return `You are deciding positions two perpetual contract assets on Binance for Pair Trading: ${asset1.instrumentId} and ${asset2.instrumentId} on ${now.toLocaleDateString()} now. Current date time is ${now.toLocaleTimeString()}
   Based on below Stats, Market data, Binance data and Funding Rate of both Assets you have to tell me which Asset suited for Long and which Asset suited for Short in pair trading.`;
 }
 
 function getExamples(): string {
   return `Example: 
-    "Long : BTCUSDT\nShort : ETHUSDT\nPearson Correlation: 0.8\nStandard Deviation: 0.23\nRemarks: High correlation suggests potential mean reversion opportunity. BTC showing relative strength vs ETH with lower volatility. Entry at 2 standard deviations from mean spread.",
-    "Long : PERPUSDT\nShort : HFTUSDT\nPearson Correlation: 0.75\nStandard Deviation: 0.31\nRemarks: PERP shows higher trading volume and market cap with positive price momentum. HFT has lower liquidity and declining funding rates."`;
+    "Long : BTCUSDT\nShort : ETHUSDT\nPearson Correlation: 0.8\nStandard Deviation: 0.23\nRemarks: Strong correlation indicates mean reversion potential. BTC shows higher market cap, lower volatility and positive funding rates. ETH has upcoming token unlocks of 2.3M tokens valued at $4.2B (3.2% of mcap) suggesting selling pressure.",
+    "Long : PERPUSDT\nShort : HFTUSDT\nPearson Correlation: 0.75\nStandard Deviation: 0.31\nRemarks: PERP exhibits 2x higher trading volume, positive funding rate change of 0.01% and stronger market depth on Binance. HFT shows declining volume with negative funding rates and lower trust score.",
+    "Long : LINKUSDT\nShort : ATOMUSDT\nPearson Correlation: 0.83\nStandard Deviation: 0.28\nRemarks: LINK demonstrates bullish momentum with 15% 24h gains, increasing funding rates from 0.01% to 0.03%. ATOM faces bearish pressure with major token unlock of 25M tokens (8% of mcap) in next 30 days and declining Binance volume.",
+    "Long : SOLUSDT\nShort : AVAXUSDT\nPearson Correlation: 0.79\nStandard Deviation: 0.25\nRemarks: SOL shows strong fundamentals with 30% higher market cap, increasing funding rates and 2x Binance volume. AVAX exhibits bearish divergence with negative price momentum, upcoming unlock events and lower trust score.",
+    "Long : MATICUSDT\nShort : FTMUSDT\nPearson Correlation: 0.77\nStandard Deviation: 0.27\nRemarks: MATIC demonstrates relative strength with positive funding rate change of 0.02%, higher Binance liquidity and no imminent unlocks. FTM faces selling pressure from 50M token unlock (4.5% of mcap) and declining market metrics."`;
 }
 
 function getCorrelationStats(correlations: CorrelationResult): string {
