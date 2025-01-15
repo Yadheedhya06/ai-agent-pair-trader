@@ -1,40 +1,78 @@
-import { WebhookClient, EmbedBuilder } from 'discord.js'
-import { DiscordResponse } from '@/common/types'
+import { WebhookClient, EmbedBuilder } from 'discord.js';
+import { DiscordResponse } from '@/common/types';
+import { config } from 'dotenv';
 
-export async function sendMessage(response: DiscordResponse) {
-  if (!process.env.DISCORD_WEBHOOK_URL) {
-    throw new Error('Discord webhook URL not configured')
+config();
+
+const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
+
+async function sendTradeAlert({
+  title,
+  longPosition,
+  shortPosition,
+  related,
+  pearsonCorrelation,
+  standardDeviation,
+  remarks,
+  category,
+  color = '#43B581'
+}: {
+  title: string;
+  longPosition: string;
+  shortPosition: string;
+  related: string;
+  pearsonCorrelation: string;
+  standardDeviation: string;
+  remarks: string;
+  category: string;
+  color?: string;
+}) {
+  if (!WEBHOOK_URL) {
+    throw new Error('Discord webhook URL not configured');
   }
-
-  const webhookClient = new WebhookClient({ 
-    url: process.env.DISCORD_WEBHOOK_URL 
-  })
 
   try {
-    console.log('Preparing Discord message...')
-    
-    const embed = new EmbedBuilder()
-      .setColor('#0099ff')
-      .setTitle('🔗 Correlation Alert')
-      .addFields(
-        { name: 'Pair', value: `${response.long} ↔️ ${response.short}`, inline: false },
-        { name: 'Correlation', value: String(response.pearsonCorrelation), inline: true },
-        { name: 'StdDev', value: String(response.standardDeviation), inline: true },
-        { name: 'Category', value: `${response.category} (${response.related} related)`, inline: false },
-        { name: 'Remarks', value: response.remarks || 'No remarks', inline: false }
-      )
-      .setTimestamp()
+    const webhookClient = new WebhookClient({ url: WEBHOOK_URL });
 
-    console.log('Sending Discord message...')
-    await webhookClient.send({
-      embeds: [embed]
-    })
-    
-    console.log('Discord message sent successfully')
+    const embed = new EmbedBuilder()
+      .setColor(color as any)
+      .setTitle(title)
+      .setDescription([
+        `**📈 Long:** ${longPosition}`,
+        `**📉 Short:** ${shortPosition}`,
+        `**✅ Related:** ${related}`,
+        category !== 'other' ? `**🏷️ Category:** ${category.charAt(0).toUpperCase() + category.slice(1)}` : '',
+        `**📊 Pearson Correlation:** ${pearsonCorrelation}`,
+        `**📏 Standard Deviation:** ${standardDeviation}`,
+        `**✨ Remarks:** ${remarks}`
+      ].filter(Boolean).join('\n\n'))
+      .setTimestamp();
+
+    await webhookClient.send({ embeds: [embed] });
+    webhookClient.destroy();
+    return;
   } catch (error) {
-    console.error('Discord send message error:', error)
-    throw error
-  } finally {
-    webhookClient.destroy()
+    console.error('Error sending trade alert:', error);
   }
+}
+
+export async function sendMessage(tradeData: DiscordResponse) {
+  const category = tradeData.category
+    .replace(/\bother\s*x\s*/gi, '')
+    .replace(/\s*x\s*other\b/gi, '')
+    .trim();
+
+  await sendTradeAlert({
+    title: '🟢 Pair Trade Alert 🟢',
+    longPosition: tradeData.long,
+    shortPosition: tradeData.short,
+    related: tradeData.related,
+    pearsonCorrelation: tradeData.pearsonCorrelation.toString(),
+    standardDeviation: tradeData.standardDeviation.toString(),
+    remarks: tradeData.remarks,
+    category: category,
+    color: '#43B581'
+  });
+  console.log('✅ Successfully sent discord alert!');
+  return;
 }
