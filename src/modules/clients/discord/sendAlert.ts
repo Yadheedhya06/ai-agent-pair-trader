@@ -1,84 +1,40 @@
-import { Client, GatewayIntentBits, TextChannel, EmbedBuilder } from 'discord.js';
-import { DiscordResponse } from '@/common/types';
-import { config } from 'dotenv';
-
-config();
-
-const TOKEN = process.env.DISCORD_BOT_TOKEN || '';
-const CHANNEL_ID = String(process.env.DISCORD_CHANNEL_ID || '');
-
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-  ]
-})
-
-let isInitialized = false
-
-async function initializeClient() {
-  if (!isInitialized) {
-    return new Promise((resolve, reject) => {
-      client.on('error', (error) => {
-        console.error('Discord client error:', error)
-        reject(error)
-      })
-
-      client.once('ready', () => {
-        console.log('Discord client ready')
-        isInitialized = true
-        resolve(true)
-      })
-
-      const loginPromise = client.login(TOKEN)
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Discord client login timeout')), 10000)
-      })
-
-      Promise.race([loginPromise, timeoutPromise])
-        .catch(reject)
-    })
-  }
-  return Promise.resolve(true)
-}
-
+import { WebhookClient, EmbedBuilder } from 'discord.js'
+import { DiscordResponse } from '@/common/types'
 
 export async function sendMessage(response: DiscordResponse) {
+  if (!process.env.DISCORD_WEBHOOK_URL) {
+    throw new Error('Discord webhook URL not configured')
+  }
+
+  const webhookClient = new WebhookClient({ 
+    url: process.env.DISCORD_WEBHOOK_URL 
+  })
+
   try {
-    console.log('Initializing Discord client...')
-    await initializeClient()
+    console.log('Preparing Discord message...')
     
-    console.log('Fetching Discord channel...')
-    const channel = await client.channels.fetch(CHANNEL_ID)
-    if (!channel || !(channel instanceof TextChannel)) {
-      throw new Error('Invalid Discord channel')
-    }
+    const embed = new EmbedBuilder()
+      .setColor('#0099ff')
+      .setTitle('🔗 Correlation Alert')
+      .addFields(
+        { name: 'Pair', value: `${response.long} ↔️ ${response.short}`, inline: false },
+        { name: 'Correlation', value: String(response.pearsonCorrelation), inline: true },
+        { name: 'StdDev', value: String(response.standardDeviation), inline: true },
+        { name: 'Category', value: `${response.category} (${response.related} related)`, inline: false },
+        { name: 'Remarks', value: response.remarks || 'No remarks', inline: false }
+      )
+      .setTimestamp()
 
     console.log('Sending Discord message...')
-    const message = formatDiscordMessage(response)
-    await channel.send(message)
+    await webhookClient.send({
+      embeds: [embed]
+    })
     
     console.log('Discord message sent successfully')
   } catch (error) {
     console.error('Discord send message error:', error)
+    throw error
   } finally {
-    try {
-      await client.destroy()
-      isInitialized = false
-    } catch (error) {
-      console.error('Error destroying Discord client:', error)
-    }
+    webhookClient.destroy()
   }
-}
-
-function formatDiscordMessage(response: DiscordResponse): string {
-  return `
-🔗 Correlation Alert
-${response.long} ↔️ ${response.short}
-Correlation: ${response.pearsonCorrelation}
-StdDev: ${response.standardDeviation}
-Category: ${response.category} (${response.related} related)
-📝 ${response.remarks}
-  `.trim()
 }
